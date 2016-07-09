@@ -1,9 +1,3 @@
-\ {nodoc}
-\ ==============================================================================
-\ ForestLib > Allegro5
-\ Allegro 5 - graphics
-\ ========================= copyright 2014 Roger Levy ==========================
-
 
 function: al_set_target_bitmap ( ALLEGRO_BITMAP-*bitmap -- )
 function: al_get_target_bitmap ( -- ALLEGRO_BITMAP-*bitmap )

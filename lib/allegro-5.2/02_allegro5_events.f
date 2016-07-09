@@ -1,8 +1,3 @@
-\ {nodoc}
-\ ==============================================================================
-\ ForestLib > Allegro5
-\ Allegro 5 event-related bindings
-\ ========================= copyright 2014 Roger Levy ==========================
 
 decimal
 #define   ALLEGRO_EVENT_JOYSTICK_AXIS                 1

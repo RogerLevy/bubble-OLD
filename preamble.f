@@ -12,7 +12,7 @@
   [then]
 
   [undefined] ffl.version [if]
-    pushpath cd lib\ffl-0.8.0
+    pushpath cd engine\lib\ffl-0.8.0
       decimal
       include xml
       include xml-utils
@@ -21,26 +21,24 @@
   [then]
   
   [undefined] 1sf [if]
-    include lib\fpext
+    include engine\lib\fpext
     cr .( loaded: fpext)
   [then]
   [undefined] rnd [if]
     requires rnd
   [then]
   [undefined] zstring [if]
-    include lib\string-operations
+    include engine\lib\string-operations
   [then]
   [undefined] file@ [if]
-    include lib\files
+    include engine\lib\files
   [then]
   [undefined] fixedp [if]
     true constant fixedp
-    include lib\fixedp_2
+    include engine\lib\fixedp_2
   [then]
   [undefined] ALLEGRO_VERSION_INT [if]
-    pushpath cd lib\allegro-5.2
-      include allegro-5.2.f
-    poppath
+    include engine\lib\allegro-5.2\allegro-5.2.f
   [then]
 
   [undefined] rld [if]

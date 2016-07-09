@@ -1,9 +1,3 @@
-\ {nodoc}
-\ ==============================================================================
-\ ForestLib > Allegro5
-\ Allegro 5 bindings - audio
-\ ========================= copyright 2014 Roger Levy ==========================
-
 
 \ addon: codec
 function: al_init_acodec_addon ( -- bool )

@@ -36,9 +36,9 @@ decimal
 #define ALLEGRO_WIP_VERSION      0
 
 [defined] allegro5-debug [if]
-  library allegro_monolith-debug-5.2.dll
+  library engine\lib\allegro-5.2\allegro_monolith-debug-5.2.dll
 [else]
-  library allegro_monolith-5.2.dll
+  library engine\lib\allegro-5.2\allegro_monolith-5.2.dll
 [then]
 
 warning off
@@ -55,13 +55,13 @@ constant ALLEGRO_VERSION_INT
 
 \ ----------------------------- load files --------------------------------
 
-include 01_allegro5_general
-include 02_allegro5_events
-include 03_allegro5_keys
-include 04_allegro5_audio
-include 05_allegro5_graphics
+include engine\lib\allegro-5.2\01_allegro5_general
+include engine\lib\allegro-5.2\02_allegro5_events
+include engine\lib\allegro-5.2\03_allegro5_keys
+include engine\lib\allegro-5.2\04_allegro5_audio
+include engine\lib\allegro-5.2\05_allegro5_graphics
 
-include tools
+include engine\lib\allegro-5.2\tools
 
 \ =============================== END ==================================
 

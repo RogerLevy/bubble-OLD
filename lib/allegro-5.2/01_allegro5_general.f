@@ -1,8 +1,3 @@
-\ {nodoc}
-\ ==============================================================================
-\ ForestLib > Allegro5
-\ Allegro 5 bindings - general
-\ ========================= copyright 2014 Roger Levy ==========================
 
 \ window stuff
 function: al_set_new_window_position ( int-x int-y -- )
