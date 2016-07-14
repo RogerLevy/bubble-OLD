@@ -1,52 +1,13 @@
-\ piston internals
-0 value breaking?
-variable fs
 
-: poll  pollKB  pollJoys ;
+defer render        \ render frame of the game
+defer sim           \ run one step of the simulation of the game
+defer frame         \ the body of the loop.  can bypass RENDER and SIM if desired.
 
-: ?wpos  fs @ ?exit  display #0 #0 al_set_window_position ;
-: ?fs  display ALLEGRO_FULLSCREEN_WINDOW fs @ al_toggle_display_flag drop  ?wpos ;
-: break  ( -- )  true to breaking? ;
+0 value me
+: as  " to me" evaluate ; immediate
 
-[defined] dev [if]
-: tick  poll  ['] sim catch drop  (sweep)  lag ++ ;
-: (render)  me >r  ?fs  ['] render catch drop  al_flip_display  r> as ;
-[else]
-: tick  poll  sim  (sweep)  lag ++ ;
-: (render)  me >r  ?fs  render  al_flip_display  r> as ;
-[then]
+variable info  \ enables debugging mode display
 
-0 value alt? \ fix alt-enter bug when game doesn't have focus
-: switch-event
-  etype ALLEGRO_EVENT_DISPLAY_SWITCH_OUT = if  -timer  then
-  etype ALLEGRO_EVENT_DISPLAY_SWITCH_IN = if  clearkb  +timer  false to alt?  then ;
+include engine\piston-internals
 
-: close-event  etype ALLEGRO_EVENT_DISPLAY_CLOSE = -exit  0 ExitProcess ;
-
-: kb-events
-  etype ALLEGRO_EVENT_KEY_DOWN = if
-    e ALLEGRO_KEYBOARD_EVENT-keycode @ case
-      <alt> of  true to alt?  endof
-      <altgr>  of  true to alt?  endof
-      <enter> of  alt? -exit  fs toggle  endof
-      <f5> of  refresh  endof
-      <escape> of  break  endof
-      <tilde> of  alt? -exit  info toggle  endof
-    endcase
-  then
-  etype ALLEGRO_EVENT_KEY_UP = if
-    e ALLEGRO_KEYBOARD_EVENT-keycode @ case
-      <alt> of  false to alt?  endof
-      <altgr>  of  false to alt?  endof
-    endcase
-  then ;
-
-: common-events  close-event switch-event kb-events ;
-: tick-event  etype ALLEGRO_EVENT_TIMER = -exit  tick  ;
-: game-events  common-events  tick-event ;
-
-: need-update?  eventq al_is_event_queue_empty  lag @ 4 >=  or ;                ( -- flag )
-: wait  eventq e al_wait_for_event ;
-: epump  begin  dup >r  execute  r>  eventq e al_get_next_event not  until  drop ;     ( xt -- )  ( -- )
-: ?redraw  lag @ -exit  need-update? -exit  (render)  0 lag ! ;   ( -- )
-
+: ok  clearkb >gfx +timer  begin  frame  breaking?  until  -timer >ide  false to breaking? ;

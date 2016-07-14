@@ -1,7 +1,7 @@
 fixed
 /RND
 
-\ standard game services (core game lexicon)
+\ engine base
 include engine\saturn\gameorama
 
 \ graphics services
@@ -11,14 +11,14 @@ include engine\modules\swes\sprites
 \ include engine\modules\swes\tilemap-collision
 \ include engine\modules\swes\layers
 
-\ load other services
+\ load other modules
 include engine\modules\stride2d
 include engine\modules\collision-grid
 include engine\modules\gameutils
 include engine\modules\wallpaper
 include engine\modules\tiled-level
 
-\ engine specific stuff
+\ load engine specific stuff
 include engine\saturn\scripting.f
 
 \ constants
@@ -121,6 +121,6 @@ create m  16 cells /allot
 
 \ piston config
 ' camRender is render
-:noname  [ is sim ]  physics  zones  logic  multi  cull  1 +to #frames ;
+:noname  [ is sim ]  physics  zones  logic  multi  cull  sweep  1 +to #frames ;
 
 

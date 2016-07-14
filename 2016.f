@@ -97,3 +97,5 @@ create penx  0 ,  here 0 ,  constant peny
 
 \ fixed point extensions
 include engine/fixext
+
+: time?  ucounter 2>r  execute  ucounter 2r> d-  d>s  i. ;                      ( xt - )  \ print time given XT takes in microseconds

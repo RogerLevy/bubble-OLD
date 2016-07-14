@@ -6,6 +6,8 @@
 0 value eventq
 0 value display
 
+\ --------------------------- initializing allegro ----------------------------
+
 : assertAllegro
   allegro? ?exit
   true to allegro?
@@ -41,8 +43,12 @@
   then
 ;
 
+\ -------------------- starting/stopping the frame timer ----------------------
+
 : +timer  displaytimer al_start_timer ;
 : -timer  displaytimer al_stop_timer ;
+
+\ ----------------------- initializing the display ----------------------------
 
 : initDisplay  ( w h -- )
   assertAllegro
@@ -60,3 +66,9 @@
   eventq  display       al_get_display_event_source  al_register_event_source
   ;
 
+\ ------------------------ words for switching windows ------------------------
+: focus  ( winapi-window - )                                                    \ force window via handle to be the active window
+  dup 1 ShowWindow drop  dup BringWindowToTop drop  SetForegroundWindow drop ;
+: >gfx  ( - )  display al_get_win_window_handle focus ;                         \ force allegro display window to take focus
+: >ide  ( - )  HWND focus ;                                                     \ force the Forth prompt to take focus
+>ide

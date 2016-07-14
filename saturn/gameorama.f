@@ -1,35 +1,35 @@
-\ game engine 0.5 (versioned 4/22/2016)
+
+\ Core:
+include engine/initDisplay
+include engine/input
+include engine/piston
+include engine/allegro-floats
+include engine/gfx
+
+\ -----------------------------------------------------------------------------
 
 fixed
 64 16 + cells struct /actorslot
 include engine/modules/nodes
 include engine/modules/rects
 include engine/modules/id-radixsort
-include engine/modules/allegro-floats
 include engine/modules/templist
 
 \ -----------------------------------------------------------------------------
 fixed
+
 variable factor  2 factor !
 320 value gfxw                                                                  \ doesn't necessarily reflect the window size.
 240 value gfxh
 0 value #frames
 
 \ -----------------------------------------------------------------------------
-include engine/initDisplay
 
 fixed
 gfxw gfxh factor @ dup 2* initDisplay                                           \ actually init the display
 
 create native  /ALLEGRO_DISPLAY_MODE /allot
   al_get_num_display_modes #1 -  native  al_get_display_mode
-
-\ ------------------------ words for switching windows ------------------------
-: focus  ( winapi-window - )                                                    \ force window via handle to be the active window
-  dup 1 ShowWindow drop  dup BringWindowToTop drop  SetForegroundWindow drop ;
-: >gfx  ( - )  display al_get_win_window_handle focus ;                         \ force allegro display window to take focus
-: >ide  ( - )  HWND focus ;                                                     \ force the Forth prompt to take focus
->ide
 
 \ --------------------------------- utilities ---------------------------------
 : nativew   native x@ s>p ;
@@ -44,7 +44,6 @@ create native  /ALLEGRO_DISPLAY_MODE /allot
 
 \ --------------------------------- keyboard ----------------------------------
 decimal
-include engine/input
 : klast  kblast swap al_key_down  ;
 : kstate kbstate swap al_key_down ;
 : kdelta >r  r@ kstate 1 and  r> klast 1 and  - ;
@@ -58,61 +57,6 @@ include engine/input
 decimal
 : jstate ( joy# button# - 0-1.0 )
   cells swap joystick[] ALLEGRO_JOYSTICK_STATE-buttons + @  PGRAN 32767 */ ;
-
-\ --------------------------- graphics services -------------------------------
-\ NTS: the pen should always function as a final translation stage
-\ NTS: add matrix words (as of 2/21 i'm going to keep things very basic.)
-: clear-to-color  ( r g b a -- ) 4af al_clear_to_color ;
-: bitmapW   al_get_bitmap_width  s>p ;
-: bitmapH   al_get_bitmap_height  s>p ;
-: soft-bitmaps  ( -- )
-  al_get_new_bitmap_flags
-  [ ALLEGRO_MIN_LINEAR ALLEGRO_MAG_LINEAR or ] literal or
-  al_set_new_bitmap_flags ;
-: crisp-bitmaps  ( -- )
-  al_get_new_bitmap_flags
-  [ ALLEGRO_MIN_LINEAR ALLEGRO_MAG_LINEAR or invert ] literal and
-  al_set_new_bitmap_flags ;
-16 cells struct /transform
-: transform  create  here  /transform allot  al_identity_transform ;
-decimal
-: hold[ 1 al_hold_bitmap_drawing ;
-: ]hold 0 al_hold_bitmap_drawing ;
-decimal
-0 constant FLIP_NONE
-1 constant FLIP_H
-2 constant FLIP_V
-3 constant FLIP_HV
-
-\ ---------------------------------- images -----------------------------------
-fixed
-0
-  xvar bmp  xvar subw  xvar subh  xvar fsubw  xvar fsubh
-  xvar subcols  xvar subrows  xvar numSubimages
-struct /image
-
-: initImage  ( ALLEGRO_BITMAP image -- ) bmp ! ;
-
-: image  ( -- <name> <path> )
-  create /image allotment <zfilespec> al_load_bitmap swap initImage ;
-
-\ dimensions
-: imageW  bmp @ bitmapW ;
-: imageH  bmp @ bitmapH ;
-: imageDims  dup imageW swap imageH ;
-
-\ ------------------------------ subimage stuff -------------------------------
-fixed
-: subdivide  ( tilew tileh image -- )
-  >r  2dup r@ subw 2v!  2af r@ fsubw 2v!
-  r@ imageDims r@ subw 2v@ 2/ 2pfloor  2dup r@ subcols 2v!
-  *  r> numSubimages ! ;
-
-: >subxy  ( n image -- x y )                                                    \ locate a subimage by index
-  >r  pfloor  r@ subcols @  /mod  2pfloor  r> subw 2v@ 2* ;
-
-: afsubimg  ( n image -- ALLEGRO_BITMAP fx fy fw fh )                           \ helps with calling Allegro blit functions
-  >r  r@ bmp @  swap r@ >subxy 2af  r> fsubw 2v@ ;
 
 \ ---------------------------------- audio ------------------------------------
 
@@ -128,8 +72,6 @@ al_restore_default_mixer  al_get_default_mixer value mixer
 \ ----------------------------- actors / stage --------------------------------
 list stage
 list backstage
-0 value me
-: as  " to me" evaluate ; immediate
 \ : var  create dup , cell +  does> @ me + ;                                      ( total -- <name> total+cell )
 : field  create over , + immediate does> @ " me ?lit + " evaluate ;             ( total -- <name> total+cell )
          \ faster but less debuggable version
@@ -152,7 +94,6 @@ class actor
   bit unload#
 value actorBit
 
-variable info  \ enables debugging mode display
 defer oneInit  ' noop is oneInit
 
 
@@ -180,8 +121,6 @@ defer oneInit  ' noop is oneInit
   me class !  oneInit  init ;
 : become  ( class -- )  me class !  init ;
 
-
-
 : 's
   state @ if
     " me >r  as " evaluate  bl parse evaluate  " r> as" evaluate
@@ -190,10 +129,8 @@ defer oneInit  ' noop is oneInit
   then
   ; immediate
 
-\ templist deathrow
-
 : abandon  me dup parent @ remove ;
-: (sweep)  0 stage all>  unload# set? -exit
+: sweep    0 stage all>  unload# set? -exit
            unload# flags not!
            abandon
            persistent# unset? if  me backstage add  then ;
@@ -211,24 +148,13 @@ defer oneInit  ' noop is oneInit
   2dup forth-wordlist search-wordlist if  nip nip execute  else
   2dup " obj/" s[ +s " .f" +s ]s included  evaluate  then ;
 
-\ -------------------------------- piston -------------------------------------
-fixed
-defer render        \ render frame of the game
-defer sim           \ run one step of the simulation of the game
-defer frame         \ the body of the loop.  can bypass RENDER and SIM if desired.
-variable lag                                                                    \ completed ticks
-include engine\piston
-: time?  ucounter 2>r  execute  ucounter 2r> d-  d>s  i. ;                      ( xt - )  \ print time given XT takes in microseconds
-
-: ok  clearkb >gfx +timer  begin  frame  breaking?  until  -timer >ide  false to breaking? ;
-
 
 \ -------------------------------- defaults -----------------------------------
 : physics  0 stage all>  vx 2v@ x 2v+! ;
 : logic  0 stage all>  act ;
 : cls  0.5 0.5 0.5 1.0 clear-to-color ;
 
-:noname  [ is sim ]  physics  logic  1 +to #frames ;
+:noname  [ is sim ]  physics  logic  sweep  1 +to #frames ;
 :noname  [ is render ] cls  0 stage all> show ;
 
 : game-frame  wait  ['] game-events epump  ?redraw ;
