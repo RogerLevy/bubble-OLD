@@ -192,9 +192,10 @@ defer oneInit  ' noop is oneInit
 
 \ templist deathrow
 
+: abandon  me dup parent @ remove ;
 : (sweep)  0 stage all>  unload# set? -exit
            unload# flags not!
-           me stage remove
+           abandon
            persistent# unset? if  me backstage add  then ;
 : unload  unload# swap 's flags or! ;
 
@@ -202,7 +203,7 @@ defer oneInit  ' noop is oneInit
 : cleanup  backstage stage graft  0 backstage all>  persistent# set? -exit  me stage add ;  \ put persistent actors back onstage
 
 \ clear everything from stage including persistent stuff.  persistent stuff is not sent to BACKSTAGE.
-: clear  backstage stage graft  0 backstage all>  persistent# set? -exit  me backstage remove ;  \ orphan persistent actors
+: clear  backstage stage graft  0 backstage all>  persistent# set? -exit  abandon ;  \ orphan persistent actors
 
 : #actors  stage length @ ;
 
