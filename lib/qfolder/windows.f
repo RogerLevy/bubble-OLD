@@ -2,6 +2,7 @@
 \ Copyright 2014 - Leon Konings - Konings Software.
 \ Created for Roger Levy
 
+\ SwiftForth-specific...
 WIN32_FIND_DATA SUBCLASS _DIRTOOL
 
    MAX_PATH BUFFER: fullpath

@@ -28,6 +28,9 @@ actor single player
 #1 value cbit  \ collision flag counter
 variable 'dialog  \ for now this is just a flag.
 
+\ automatically load images and sounds.
+include engine\saturn\autodata
+
 \ game-specific data
 include data
 

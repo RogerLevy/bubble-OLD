@@ -6,7 +6,7 @@
 \ Forth Language-level Extensions
 
   \ a directory scanner / file finder
-  [undefined]
+  [undefined] qfolder [if]
     \ uncomment for linux:
     \ true constant linux?
     include engine\lib\qfolder\qfolder
