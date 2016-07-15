@@ -4,12 +4,15 @@
 \ since this file can be loaded multiple times in a programming session.
 
 \ Forth Language-level Extensions
+
+  \ a directory scanner / file finder
   [undefined]
     \ uncomment for linux:
     \ true constant linux?
     include engine\lib\qfolder\qfolder
   [then]
 
+  \ floating point
   [undefined] f+ [if]
     +opt
     warning on
@@ -17,6 +20,7 @@
     cr .( loaded: fpmath)
   [then]
 
+  \ XML, Base64
   [undefined] ffl.version [if]
     pushpath cd engine\lib\ffl-0.8.0
       decimal
@@ -26,6 +30,7 @@
     poppath
   [then]
   
+  \ Various extensions
   [undefined] 1sf [if]
     include engine\lib\fpext
     cr .( loaded: fpext)
@@ -47,6 +52,7 @@
     include engine\lib\allegro-5.2\allegro-5.2.f
   [then]
 
+  \ RLD
   [undefined] rld [if]
     : rld  ( -- )  warning off  s" dev.f" included ;
     \ Dev tool: reload from the top
@@ -81,7 +87,7 @@
     gild
   [then]
 
-\ some more entitlements
+\ Some more entitlements
 include engine\2016
 
 /RND
