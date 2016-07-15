@@ -1,6 +1,3 @@
-fixed
-/RND
-
 \ engine base
 include engine\saturn\gameorama
 
