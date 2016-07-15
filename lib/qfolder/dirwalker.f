@@ -6,9 +6,7 @@
 \ DIRECTORYWALKER, WALKING THROUGH ONE DIRECTORY
 \
 
-{ ---
-Starts recursive word (directorywalker) that works on one directory.
---- }
+\ Starts recursive word (directorywalker) that works on one directory.
 
 create zfolder path-length /allot
 
@@ -51,15 +49,13 @@ false to dir-finished
 
 \ DIRECTORIESWALKER1
 
-{ ---
-Starts recursive word (directorieswalker1) that works on one directory.
-When it encounters a subdirectory, it calls itself to open another directory stream.
-
-The param can be used by the execution token file-xt.
-When file-xt returns true, continue-actions is set to false,
-and walking through the directory tree is stopped.
-The opened directories on the stack are all closed.
---- }
+\ Starts recursive word (directorieswalker1) that works on one directory.
+\ When it encounters a subdirectory, it calls itself to open another directory stream.
+\
+\ The param can be used by the execution token file-xt.
+\ When file-xt returns true, continue-actions is set to false,
+\ and walking through the directory tree is stopped.
+\ The opened directories on the stack are all closed.
 
 \ file-xt  ( dirent param -- stop? )
 
@@ -108,18 +104,16 @@ The opened directories on the stack are all closed.
 
 \ DIRECTORIESWALKER2
 
-{ ---
-Starts recursive word (directorieswalker1) that works on one directory.
-When it encounters a subdirectory, it calls itself, to open another directory stream.
-
-The param can be used by the execution token file-xt.
-When file-xt returns true, continue-actions is set to false,
-and walking through the directory tree is stopped.
-The opened directories on the stack are all closed.
-
-Folder-xt is a filter. When it returns false, the folder will not be entered,
-so it is excluded from the walk-through.
----}
+\ Starts recursive word (directorieswalker1) that works on one directory.
+\ When it encounters a subdirectory, it calls itself, to open another directory stream.
+\
+\ The param can be used by the execution token file-xt.
+\ When file-xt returns true, continue-actions is set to false,
+\ and walking through the directory tree is stopped.
+\ The opened directories on the stack are all closed.
+\
+\ Folder-xt is a filter. When it returns false, the folder will not be entered,
+\ so it is excluded from the walk-through.
 
 \ folder-xt  ( zpath -- enter? )
 
@@ -175,19 +169,17 @@ so it is excluded from the walk-through.
 
 \ DIRECTORIESWALKER3
 
-{ ---
-Starts recursive word (directorieswalker1) that works on one directory.
-When it encounters a subdirectory, it calls itself, to open another directory stream.
-
-The param can be used by the execution token file-xt.
-When file-xt returns true, continue-actions is set to false,
-and walking through the directory tree is stopped.
-The opened directories on the stack are all closed.
-
-Folder1-xt is executed on the way down the directory tree, when a subdirectory is entered.
-
-Folder2-xt is executed on the way up the directory tree, when a subdirectory is closed.
----}
+\ Starts recursive word (directorieswalker1) that works on one directory.
+\ When it encounters a subdirectory, it calls itself, to open another directory stream.
+\
+\ The param can be used by the execution token file-xt.
+\ When file-xt returns true, continue-actions is set to false,
+\ and walking through the directory tree is stopped.
+\ The opened directories on the stack are all closed.
+\
+\ Folder1-xt is executed on the way down the directory tree, when a subdirectory is entered.
+\
+\ Folder2-xt is executed on the way up the directory tree, when a subdirectory is closed.
 
 : (directorieswalker3)  ( c-addr u file-xt param folder1-xt folder2-xt -- )
   locals| folder2-xt folder1-xt param file-xt |

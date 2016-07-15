@@ -4,6 +4,12 @@
 \ since this file can be loaded multiple times in a programming session.
 
 \ Forth Language-level Extensions
+  [undefined]
+    \ uncomment for linux:
+    \ true constant linux?
+    include engine\lib\qfolder\qfolder
+  [then]
+
   [undefined] f+ [if]
     +opt
     warning on

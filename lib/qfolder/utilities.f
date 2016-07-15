@@ -2,18 +2,19 @@
 \ Copyright 2014 - Leon Konings - Konings Software.
 \ Created for Roger Levy
 
-[DEFINED] win32-constants constant WINDOWS?
-
 \
 \ CASE SENSITIVITY
 \
 
+[undefined] upcase [if]
+: upcase  ( c-addr u -- c-addr u )
+  dup 0> if  2dup 2>r  bounds do i c@ upper i c! loop  2r>  then ;
+[then]
 
-\ Changes string in z-addr to uppercase in place.
-: z-uppercase  ( z-addr -- z-addr ) dup  begin dup c@  dup while  upper over c!  1+ repeat 2drop ;
+: z-uppercase  zcount upcase ;
 
 \ Case insensitive compare.
-: uppcompare  ( c-addr1 len1 c-addr2 len2 -- )
+: uppcompare  ( c-addr1 len1 c-addr2 len2 -- n )
   dup>r  pad zplace  pad r@ + 1+ zplace
   pad r> + 1+ zcount  2dup upcase
   pad zcount  2dup upcase
@@ -27,7 +28,7 @@
   over c@ [char] / = if  2drop true exit  then
   2 >= if  1+ c@ [char] : =  then ;
 
-WINDOWS? [if] char \ [else] char / [then] constant pathseparator
+[undefined] linux? [if] char \ [else] char / [then] constant pathseparator
 
 create spathseparator 1 c, pathseparator c,
 
@@ -53,7 +54,7 @@ create spathseparator 1 c, pathseparator c,
   compare ;
 
 : partialpath?  ( c-addr u -- flag )
-  2dup absolutepath? if  drop zero exit  then
+  2dup absolutepath? if  drop drop 0 exit  then
   pathseparator scan 0<> nip ;
 
 \
@@ -71,5 +72,5 @@ create spathseparator 1 c, pathseparator c,
 ;
 
 : absolutepath-exists  ( c-addr u -- c-addr/u/true | false )
-  2dup absolutepath? if  file-exists  else  drop zero  then ;
+  2dup absolutepath? if  file-exists  else  drop drop 0  then ;
 

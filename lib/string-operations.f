@@ -1,5 +1,14 @@
 : " postpone s" ; immediate
 
+\ zero-term strings
+
+[undefined] zcount [if]
+: zcount ( zaddr -- addr n )   dup dup if  65535 0 scan drop over - then ;
+: zlength ( zaddr -- n )   zcount nip ;
+: zplace ( from n to -- )   tuck over + >r  cmove  0 r> c! ;
+: zappend ( from n to -- )   zcount + zplace ;
+[then]
+
 \ ------------------------------------------------------------------------------
 \ string concatenation
 \ NOTE: this is not implemented the best way and is probably due for a rehaul

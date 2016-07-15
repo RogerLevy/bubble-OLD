@@ -11,18 +11,16 @@
 \ ?FOLDER1
 \
 
-{ ---
-Using directorieswalker1 searches the entire directory tree for zfile,
-which is a path. if  a filename is encountered once,
-the file that is closest to the start directory is returned.
+\ Using directorieswalker1 searches the entire directory tree for zfile,
+\ which is a path. if  a filename is encountered once,
+\ the file that is closest to the start directory is returned.
+\
+\ file-xt  ( dirent file-zstr -- stop? )
+\
+\ Word findclosest is the file-xt for directorieswalker1.
 
-file-xt  ( dirent file-zstr -- stop? )
-
-Word findclosest is the file-xt for directorieswalker1.
---- }
-
-12345 value closestlevel
-false value filefound
+12345 value closestlevel  \ magic number: do not change
+0 value filefound
 
 : (search-closest-file)  ( dirent zstr -- stop? )
   zcount rot .filename zcount -path pathcompare 0=
@@ -57,16 +55,14 @@ false value filefound
 \ ?FOLDER-FAST1
 \
 
-{ ---
-Using directorieswalker1 searches directory tree for zfile, which is a path.
-Searches the tree, Until a filename is encountered.
-
-if  a filename exists more than once, a random file is returned.
-
-file-xt  ( dirent file-zstr -- stop? )
-
-Word findfirst is the file-xt for directorieswalker1.
---- }
+\ Using directorieswalker1 searches directory tree for zfile, which is a path.
+\ Searches the tree, Until a filename is encountered.
+\
+\ if  a filename exists more than once, a random file is returned.
+\
+\ file-xt  ( dirent file-zstr -- stop? )
+\
+\ Word findfirst is the file-xt for directorieswalker1.
 
 create zfile-buf path-length /allot
 
@@ -101,20 +97,18 @@ create zfile-buf path-length /allot
 \ ?FOLDER2
 \
 
-{ ---
-Using directorieswalker2 searches entire the directory tree for zfile,
-which is a path. if  a filename is encountered once,
-the file that is closest to the start directory is returned.
-
-file-xt  ( dirent file-zstr -- stop? )
-
-Word findclosest is the file-xt for directorieswalker2.
-
-folder-xt ( zfolderpath -- enter? )
-
-Folder-xt is a filter. When it returns false, the folder will not be entered,
-so it is excluded from the walk-through.
----}
+\ Using directorieswalker2 searches entire the directory tree for zfile,
+\ which is a path. if  a filename is encountered once,
+\ the file that is closest to the start directory is returned.
+\
+\ file-xt  ( dirent file-zstr -- stop? )
+\
+\ Word findclosest is the file-xt for directorieswalker2.
+\
+\ folder-xt ( zfolderpath -- enter? )
+\
+\ Folder-xt is a filter. When it returns false, the folder will not be entered,
+\ so it is excluded from the walk-through.
 
 : findclosest2  ( zfile folder-xt zstartdirectory -- zdirpath true | false )
   locals| zstartdirectory folder-xt zfile |
@@ -135,21 +129,19 @@ so it is excluded from the walk-through.
 \ ?FOLDER-FAST2
 \
 
-{ ---
-Using directorieswalker2 searches directory tree for zfile, which is a path.
-Searches the tree, Until a filename is encountered.
-
-if  a filename exists more than once, a random file is returned.
-
-file-xt  ( dirent file-zstr -- stop? )
-
-Word findfirst is the file-xt for directorieswalker2.
-
-folder-xt ( zfolderpath -- enter? )
-
-Folder-xt is a filter. When it returns false, the folder will not be entered,
-so it is excluded from the walk-through.
---- }
+\ Using directorieswalker2 searches directory tree for zfile, which is a path.
+\ Searches the tree, Until a filename is encountered.
+\
+\ if  a filename exists more than once, a random file is returned.
+\
+\ file-xt  ( dirent file-zstr -- stop? )
+\
+\ Word findfirst is the file-xt for directorieswalker2.
+\
+\ folder-xt ( zfolderpath -- enter? )
+\
+\ Folder-xt is a filter. When it returns false, the folder will not be entered,
+\ so it is excluded from the walk-through.
 
 : (?folder-fast2)  ( zfile folder-xt zstartdirectory -- zdirpath true | false )
   locals| zstartdirectory folder-xt zfile |
@@ -170,13 +162,11 @@ so it is excluded from the walk-through.
 \ RELATIVE-TO
 \
 
-{ ---
-Returns the closest relative path to filepath starting at directory folderpath.
-
-if  filepath is not a absolute path directorieswalker3 searches the entire
-directory tree for filepath. if  a filename is encountered more than once,
-the file that is closest to the start directory is returned.
--- }
+\ Returns the closest relative path to filepath starting at directory folderpath.
+\
+\ if  filepath is not a absolute path directorieswalker3 searches the entire
+\ directory tree for filepath. if  a filename is encountered more than once,
+\ the file that is closest to the start directory is returned.
 
 create zrelativepath-buf path-length /allot
 

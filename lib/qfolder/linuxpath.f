@@ -107,10 +107,10 @@ false value linuxpathgetnext
   dup zcount file-exists dup not if  nip  then ;
 
 : zcheckpath  ( zpath1 -- zpath2/true | false )
-  WINDOWS? if  zfileexists  else  zlinuxpath  then ;
+  [undefined] linux? [if] zfileexists  [else]  zlinuxpath  [then] ;
 
 : fileexists ( c-path1 u -- c-path2/u/true | false )
   2dup file-exists dup not if  2drop zero  then ;
 
 : checkpath  ( c-path1 u -- c-path2/u/true | false )
-  WINDOWS? if  fileexists  else  linuxpath  then ;
+  [undefined] linux? [if]  fileexists  [else]  linuxpath  [then] ;
