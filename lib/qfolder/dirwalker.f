@@ -10,7 +10,7 @@
 
 create zfolder path-length /allot
 
-: (directorywalker)  ( c-addr u xt zstr -- Dir dirent )
+: (directorywalker)  ( c-addr u xt zstr -- Dir dirent ) ( dirent zstr -- stop? )
   locals| zstr xt |
   opendir
   dup dirfd fchdir
@@ -19,11 +19,10 @@ create zfolder path-length /allot
   while \ Dir dirent
     dup subdir/file
     \ cr ." subdir/file: " .
-    \ xt  ( dirent zstr -- stop? )
     if  zstr xt execute if  0 exit  then  else  drop  then
   repeat ;
 
-: directorywalker  ( c-addr u xt zstr -- )
+: directorywalker  ( c-addr u xt zstr -- ) ( dirent zstr -- stop? )
   pushpath
   (directorywalker) drop  ?dup if  closedir drop  then
   poppath ;
@@ -57,9 +56,8 @@ false to dir-finished
 \ and walking through the directory tree is stopped.
 \ The opened directories on the stack are all closed.
 
-\ file-xt  ( dirent param -- stop? )
 
-: (directorieswalker1)  ( c-addr u file-xt param -- )
+: (directorieswalker1)  ( c-addr u file-xt param -- ) ( dirent zstr -- stop? )
   locals| param file-xt |
   \ cr ."  (directorieswalker1): " 2dup type .s cr cr
   opendir  \ Dir
@@ -96,7 +94,7 @@ false to dir-finished
   -2 +to level
   true to dir-finished ;
 
-: directorieswalker1  ( dirpath c file-xt param -- )
+: directorieswalker1  ( dirpath c file-xt param -- ) ( dirent param -- stop? )
   pushpath
   initdirectorywalker
    (directorieswalker1)
@@ -118,7 +116,7 @@ false to dir-finished
 \ folder-xt  ( zpath -- enter? )
 
 
-: (directorieswalker2)  ( c-addr u file-xt param folder-xt -- )
+: (directorieswalker2)  ( c-addr u file-xt param folder-xt -- )  ( dirent param -- stop? ) ( zpath -- enter? )
   locals| folder-xt param file-xt |
   \ cr ."  (directorieswalker2): " 2dup type .s cr cr
   opendir  \ Dir
@@ -161,7 +159,7 @@ false to dir-finished
   -2 +to level
   true to dir-finished ;
 
-: directorieswalker2  ( c-addr u file-xt param folder-xt -- )
+: directorieswalker2  ( c-addr u file-xt param folder-xt -- ) ( dirent param -- stop? ) ( zpath -- enter? )
   pushpath
   initdirectorywalker
   (directorieswalker2)
@@ -181,7 +179,7 @@ false to dir-finished
 \
 \ Folder2-xt is executed on the way up the directory tree, when a subdirectory is closed.
 
-: (directorieswalker3)  ( c-addr u file-xt param folder1-xt folder2-xt -- )
+: (directorieswalker3)  ( c-addr u file-xt param folder1-xt folder2-xt -- ) ( dirent param -- stop? ) ( zpath -- enter? ) ( zpath -- enter? )
   locals| folder2-xt folder1-xt param file-xt |
   \ cr ."  (directorieswalker3): " 2dup type .s cr cr
   opendir  \ Dir
@@ -220,7 +218,7 @@ false to dir-finished
   folder2-xt execute
   true to dir-finished ;
 
-: directorieswalker3  ( c-addr u file-xt param folder1-xt folder2-xt -- )
+: directorieswalker3  ( c-addr u file-xt param folder1-xt folder2-xt -- ) ( dirent param -- stop? ) ( zpath -- enter? ) ( zpath -- enter? )
   pushpath
   initdirectorywalker
   (directorieswalker3)
