@@ -39,7 +39,7 @@ $f0000000 constant DEPTHMASK
 : @zdepth  [ zdepth me - ]# + @ [ DEPTHMASK invert ]# and ;
 : sort  dup here over - cell/ s>p ['] @zdepth irsort
          ; \ dup here over - .s idump ;
-: dfilter  stage all>  vis @ -exit  dup zdepth @ DEPTHMASK and = if  enqueue  then ;
+: dfilter  ( n -- ) stage all>  vis @ -exit  dup zdepth @ DEPTHMASK and = if  enqueue  then ;
 
 \ -----------------------------------------------------------------------------
 \ tile buffer
