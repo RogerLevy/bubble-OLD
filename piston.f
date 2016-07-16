@@ -3,6 +3,9 @@ defer render        \ render frame of the game
 defer sim           \ run one step of the simulation of the game
 defer frame         \ the body of the loop.  can bypass RENDER and SIM if desired.
 
+variable simerr
+variable renerr
+
 0 value me
 : as  " to me" evaluate ; immediate
 

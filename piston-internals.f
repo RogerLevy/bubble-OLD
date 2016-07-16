@@ -10,8 +10,8 @@ variable lag                                                                    
 : break  ( -- )  true to breaking? ;
 
 [defined] dev [if]
-: tick  poll  ['] sim catch drop  lag ++ ;
-: (render)  me >r  ?fs  ['] render catch drop  al_flip_display  r> as ;
+: tick  poll  ['] sim catch simerr !  lag ++ ;
+: (render)  me >r  ?fs  ['] render catch renerr !  al_flip_display  r> as ;
 [else]
 : tick  poll  sim  (sweep)  lag ++ ;
 : (render)  me >r  ?fs  render  al_flip_display  r> as ;
