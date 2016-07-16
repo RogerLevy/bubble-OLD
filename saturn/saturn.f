@@ -84,7 +84,8 @@ variable bgbubbles  bgbubbles on
 include engine\saturn\zones.f
 
 
-\ camera/rendering
+\ --------------------------- camera/rendering --------------------------------
+
 transform baseline
 
 : /baseline  ( -- )
@@ -92,6 +93,8 @@ transform baseline
   baseline  factor @ dup 2af  al_scale_transform
   baseline  al_use_transform  ;
 
+
+\ camera stuff
 
 create m  16 cells /allot
 
@@ -108,6 +111,19 @@ create m  16 cells /allot
   camTransform  dup  factor @ dup 2af  al_scale_transform
   al_use_transform ;
 
+
+\ depth sorting
+
+: enqueue  me , ;
+: showem  ( addr -- addr )  here over ?do  i @ as  show  cell +loop ;
+: @zdepth  [ zdepth me - ]# + @ ;
+: sort  dup here over - cell/ s>p  ['] @zdepth irsort ;
+: vfilter  0 stage all>  vis @ -exit  enqueue ;
+: sorted  here  vfilter  sort  showem  reclaim ;
+
+
+\ rendering
+
 : para  ;
 : batch  al_hold_bitmap_drawing ;
 : cls  0 0 0 1 clear-to-color ;
@@ -115,12 +131,21 @@ create m  16 cells /allot
 : all  0 stage all>  show ;
 : boxes  info @ -exit  0 stage all>  showCbox ;
 : camRender
-  cls  /baseline  para  track  camview  1 batch  all  overlays  0 batch  boxes ;
+  cls  /baseline
+  para  track  camview
+  1 batch  sorted  overlays  0 batch
+  boxes ;
+
+
+\ bring the logic together
 
 : logic  0 stage all> act ;
+: saturnSim  physics zones  logic  multi  cull  sweep  1 +to #frames ;
+
 
 \ piston config
+
 ' camRender is render
-:noname  [ is sim ]  physics  zones  logic  multi  cull  sweep  1 +to #frames ;
+' saturnSim is sim
 
 
