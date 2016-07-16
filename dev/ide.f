@@ -236,7 +236,13 @@ public
   cx @ cy @ cw @ ch @ al_set_clipping_rectangle ;
 
 
-: cls  ( -- )  focus @ if  0.4 0.4 0.4 1  else  0 0.3 0 1  then clear-to-color ;
+: ?focusbg
+  simerr @ if 0.8 else 0.4 then
+  0.4
+  renerr @ if 0.8 else 0.4 then
+  1 ;
+
+: cls  ( -- )  focus @ if  ?focusbg  else  0 0.3 0 1  then clear-to-color ;
 
 : reindeer  ['] render catch drop ;
 : (render)  me >r  ?fs  cls  ['] reindeer framed  ui  al_flip_display  r> as ;
@@ -277,16 +283,20 @@ transform baseline
   previous-personality @ if close-personality then
 ;
 
-: ide
-  console-personality open-personality
+: ide-piston
   ['] ide-ui is ui
   ['] ide-events is events
   ['] ide-frame is frame
+;
+
+: ide
+  console-personality open-personality
+  ide-piston
   fs on
   focus on
   ok
   ide/
-  ;
+;
 
 : rld  ide/  rld ;
 : empty  ide/  empty ;
