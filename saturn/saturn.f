@@ -47,12 +47,16 @@ fixed
   at@  startx 2v!
   1 1 1 1 !color
   csolid# cmask !
+  32768 zdepth !
   ;
 
 
 player as  " traveler" script become
   100 100 player put
 
+\ -----------------------------------------------------------------------------
+
+\ bubble stuff
 
 include obj\bubble
 
@@ -66,7 +70,7 @@ variable bgbubbles  bgbubbles on
 
 : *bgbubble
   cam 's x 2v@  0 gfxh 2+  -70 10 2+  gfxw 140 + 0  somewhere at
-  me  bubble one  -1 vy !  1 0 0 1 !color
+  me  bubble one  -1 vy !  1 0 0 1 !color  -100 zdepth +!    0 cflags !  0 cmask !
   as ;
 
 :task bubblefx
@@ -80,9 +84,9 @@ variable bgbubbles  bgbubbles on
 
 : cull  0 stage all>  me class @ 'cull @ execute ;
 
+\ -----------------------------------------------------------------------------
 
 include engine\saturn\zones.f
-
 
 \ --------------------------- camera/rendering --------------------------------
 
