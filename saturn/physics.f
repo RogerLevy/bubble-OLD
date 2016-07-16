@@ -93,7 +93,7 @@ to cbit
   !dyns
   0 stage all>
     cmask @ -exit
-    clampVel
+    vx 2v@ or if  clampVel  then
     ahb literal dynGrid  cflags @ if  checkGrid  else  checkCbox  then
 ;
 
