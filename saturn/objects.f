@@ -1,7 +1,5 @@
 doming +order
 
-fixed
-
 
 actor super
   var w            \ hitbox dimensions
@@ -124,4 +122,3 @@ doming +order
 : /dims  ( -- )  @dims w 2v! ;
 doming -order
 
-: clampVel  ( -- ) x 2v@  vx 2v@  2+  extents  w 2v@ 2-  2clamp  x 2v@ 2-  vx 2v! ;
