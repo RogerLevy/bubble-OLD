@@ -6,7 +6,7 @@ fixed
 
 /image safetable tilesets
 
-: tileset  ( tilew tileh -- <name> <filespec> )  ( -- id )
-  tilesets entry >r <zfilespec> al_load_bitmap r@ initImage r> subdivide ;
+: tileset  ( tilew tileh image -- <name> )  ( -- id )
+  tilesets entry >r  r@ /image move  r> subdivide ;
   
 : >tileset  tilesets id> ;

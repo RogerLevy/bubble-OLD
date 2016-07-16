@@ -4,8 +4,8 @@ fixed
 
 /image safetable spritesets
 
-: spriteset  ( w h string count -- <name> )  ( -- id )
-  spritesets entry >r  <zfilespec> al_load_bitmap r@ initImage  r> subdivide ;
+: spriteset  ( w h image -- <name> )  ( -- id )
+  spritesets entry >r  r@ /image move  r> subdivide ;
 
 \ Utility to help with calling Allegro functions.
 : sprite>af  ( subimage# spriteset# -- bitmap afsx afsy afsw afsh )  spritesets id> afsubimg ;
