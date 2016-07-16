@@ -1,6 +1,7 @@
 fixed
 
 \ 16-bit positive-integer-fixed-point-identifier optimized radix sort!
+\ supports sorting a range of numbers between and including 0 ~ 65535
 
 \ the "radix" in a radix sort is a position or digit within the numbers
 \ we're sorting.  with each pass, we move the radix one digit.  in this case,
@@ -18,7 +19,7 @@ fixed
 \ since this is meant to be used for the stage, a reasonable maximum limit is
 \ 8192 items which works out to 1MB.
 
-\ $0fff f000 <--- significant bits
+\ $0fff f000 <--- significant bits.
 
 
 
@@ -30,6 +31,7 @@ fixed
 [then]
 
 package rsorting
+private
   $0000f000 constant nyb0
   nyb0 value radix
   0 constant pass1shift
@@ -76,39 +78,39 @@ private
     16 0 do  i bucket @+ cells dup >r  dest swap move  r> +to dest  loop ;
 
 public
-  : irsort  ( source count xt -- )  \ result is placed in source, XT is @KEY
-    over 0= if 2drop drop exit then
-    \ /radix
-    irinit  over src!  irpass  radix++
-    tablepass tablepass tablepass
-    src dest!  !result
-    ; \ radix/ ;
-  
+: irsort  ( source count xt -- )  \ result is placed in source, XT is @KEY
+over 0= if 2drop drop exit then
+\ /radix
+irinit  over src!  irpass  radix++
+tablepass tablepass tablepass
+src dest!  !result
+; \ radix/ ;
 
 
-  \ test
-  marker dispose
-  create sortable  4123 , 9 , 5 , 1 , 401 , 234 , 100 , 5 , 99 , 4123 , 23 , 3 , 400 , 50 ,
-  : test  <> abort" radix sort test failed!" ;
-  \ hex sortable 14 cells idump fix
-  sortable 14 ' noop irsort
-  \ hex sortable 14 cells idump fix
-  sortable
-  @+ 1 test
-  @+ 3 test
-  @+ 5 test
-  @+ 5 test
-  @+ 9 test
-  @+ 23 test
-  @+ 50 test
-  @+ 99 test
-  @+ 100 test
-  @+ 234 test
-  @+ 400 test
-  @+ 401 test
-  @+ 4123 test
-  @+ 4123 test
-  drop
-  dispose
+
+\ test
+marker dispose
+create sortable  4123 , 9 , 5 , 1 , 401 , 234 , 100 , 5 , 99 , 4123 , 23 , 3 , 400 , 50 ,
+: test  <> abort" radix sort test failed!" ;
+\ hex sortable 14 cells idump fix
+sortable 14 ' noop irsort
+\ hex sortable 14 cells idump fix
+sortable
+@+ 1 test
+@+ 3 test
+@+ 5 test
+@+ 5 test
+@+ 9 test
+@+ 23 test
+@+ 50 test
+@+ 99 test
+@+ 100 test
+@+ 234 test
+@+ 400 test
+@+ 401 test
+@+ 4123 test
+@+ 4123 test
+drop
+dispose
 
 end-package
