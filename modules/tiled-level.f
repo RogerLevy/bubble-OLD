@@ -26,7 +26,7 @@ staticvar 'onMapLoad
   dom.element = -exit  2dup " name" @attr compare 0=
 ;
   \ only consists of elements called "property" so no need to check the names of the elements
-  : ?@prop  ( addr c -- false | val true )
+  : ?prop  ( addr c -- false | val true )
     nest
     " properties" ?sib  not if  unnest ( addr c ) 2drop false exit  then
     [ literal ] search   nip nip if  " value" @attr  true  else  false then

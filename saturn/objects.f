@@ -43,7 +43,8 @@ decimal
   create lookupTbl  0 , 2 , 1 , 3 ,
   : tmx>aflip  cells lookupTbl + @ ;
   : /flip  decimal " gid" @attr 30 >> tmx>aflip flip ! fixed ;
-  actor onMapLoad:  /flip ;
+  : /depth  " zdepth" ?@prop -exit  zdepth ! ;
+  actor onMapLoad:  /flip /depth ;
 fixed
 
 \ -----------------------------------------------------------------------------
