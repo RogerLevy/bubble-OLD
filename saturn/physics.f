@@ -1,5 +1,3 @@
-1000 extents 2nip collisionGrid boxGrid
-2000 extents 2nip collisionGrid dynGrid
 
 cgridding +order
 
@@ -9,6 +7,12 @@ cgridding +order
 \  cmask  defines what objects an object can "detect"
 \  if an object's cflags are all 0 it won't be able to be detected by anything.
 \  if cgroup is all 0 it disables detecting other objects
+
+
+1000 extents 2nip collisionGrid boxGrid
+2000 extents 2nip collisionGrid dynGrid
+#1 value cbit  \ collision flag counter
+0 value you  \ for collision responses
 
 
 \ the flags:
@@ -82,11 +86,14 @@ to cbit
 : detect  ( ... me=actor xt -- ... ) ( true you=other -- keepgoing? )
   x 2v@ putCbox  xt >r  to xt  ahb literal dynGrid checkCbox  r> to xt ;
 
+: clampVel  ( -- ) x 2v@  vx 2v@  2+  extents  w 2v@ 2-  2clamp  x 2v@ 2-  vx 2v! ;
+
 :noname  nip  ahb>actor to you  cmask @ cfilter -exit  hit ;
 : /dynamic
   !dyns
   0 stage all>
     cmask @ -exit
+    clampVel
     ahb literal dynGrid  cflags @ if  checkGrid  else  checkCbox  then
 ;
 
@@ -102,3 +109,4 @@ to cbit
 : detector:  create  here 0 ,   does-detect  :noname swap !  ;
 
 cgridding -order
+
