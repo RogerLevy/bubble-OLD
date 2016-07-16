@@ -143,8 +143,9 @@ create m  16 cells /allot
 
 \ bring the logic together
 
+: ?reload  <f7> kpressed -exit  -timer reload +timer ;
 : logic  0 stage all> act ;
-: saturnSim  physics zones  logic  multi  cull  sweep  1 +to #frames ;
+: saturnSim  physics  zones  ?reload  logic  multi  cull  sweep  1 +to #frames ;
 
 
 \ piston config
