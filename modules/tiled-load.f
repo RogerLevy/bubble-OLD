@@ -1,7 +1,6 @@
-
-fixed
-
+create bgObjTable 1024 cells /allot \ bitmaps
 staticvar firstgid
+
 defer onLoadBox  ( pen=xy -- )
 :noname [ is onLoadBox ] cr ." WARNING: onLoadBox is not defined!" ;
 
@@ -18,13 +17,31 @@ staticvar 'onMapLoad
     prevClass @
   repeat  ; \ cr dup body> >name count type ;
 
-: readTileset  ( -- )
-  " firstgid" @attr ( n )  " name" @attr$ script ( class ) firstgid ! ;
+\ Here is where I think we detect the bgobj tileset and create our table,
+\ loading images as needed.
+\ don't forget to free any old images first and clear the table.
 
-\ utility word @PROP: read custom object property
+: clearbgimages
+    bgObjTable 1024 0 do @+ ?dup if al_destroy_bitmap then loop  drop
+    bgObjTable 1024 ierase ;
+
+: addBGImage  ( dest path c -- dest+cell )
+    " data/maps/" s[ +s ]s zstring al_load_bitmap !+ ;
+
+: bgobjtiles ( dest type -- dest )
+    dom.element <> ?exit  nest  " image" ?sib drop  .node " source" @attr$ addBGImage  unnest ;
+
+: bgobj?   " name" @attr$ " bgobj" compare 0= ;
+
+: readTileset  ( -- )
+  " firstgid" @attr ( n )  " name" @attr$ script  ( class )  firstgid !
+  bgobj? -exit  clearbgimages  bgobjtable  ['] bgobjtiles drill  drop ;
+
+\ utility word ?PROP: read custom object property
+
 :noname  ( addr c type -- addr c flag )  \ check the name attribute of each property element til we find a match
-  dom.element = -exit  2dup " name" @attr compare 0=
-;
+  dom.element = -exit  2dup " name" @attr compare 0= ;
+
   \ only consists of elements called "property" so no need to check the names of the elements
   : ?prop  ( addr c -- false | val true )
     nest

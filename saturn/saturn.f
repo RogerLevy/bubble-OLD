@@ -13,7 +13,7 @@ include engine\modules\stride2d
 include engine\modules\collision-grid
 include engine\modules\gameutils
 include engine\modules\wallpaper
-include engine\modules\tiled-level
+include engine\modules\tiled-load
 
 \ load engine specific stuff
 include engine\saturn\scripting.f
