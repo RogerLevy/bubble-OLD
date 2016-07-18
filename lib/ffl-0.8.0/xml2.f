@@ -5,16 +5,14 @@ only forth definitions
 
 [defined] decimal [if] decimal [then]
 
-pushpath cd engine/lib/ffl-0.8.0
 package ffling
 private
   [UNDEFINED] ffl.version [IF]
     include ffl/config.fs
+    public
+      include ffl/dom.fs
   [THEN]
-public
-  include ffl/dom.fs
 end-package
-poppath
 
 
 package xmling
@@ -25,46 +23,56 @@ dom-create dom
 : >next ( node -- node|0 )  nnn>dnn dnn-next@ ;
 : done  dom dom-(free) ;
 : xml  ( adr c -- root-node )  done  true dom dom-read-string 0= throw  dom >root ;
-: #children  ( node -- n )  nnn>children dnl>length @ s>p ;
+: #children  ( node -- n )  nnn>children dnl>length @ ;
 : @name  ( node -- adr c )  dom>node>name str-get ;
-: @value  ( node -- adr c )  dom>node>value str-get ;
+: @val  ( node -- adr c )  dom>node>value str-get ;
 : @type  ( node -- dom-node-type )  dom>node>type @ ;
+: element?  ( node -- node flag )  dup @type dom.element = ;
+\ : ?children  dup #children 0= abort" element has no children" ;
 : >first  nnn>children dnl>first @ ;
 0 value XT
 : (scan)  ( node -- ) ( ... node -- stop? ... )
-    dup #children 0= if drop abort" element has no children" exit then
-    >first   begin  ?dup while  dup XT execute if drop exit then  >next  repeat ;
+    >first   begin  ?dup while  dup >r  XT execute  if  r> drop exit then  r> >next  repeat ;
 : scan  ( node xt -- ) ( ... node -- stop? ... )
     XT >r  to XT  (scan)  r> to XT  ;
-: .name  ." <" @name type ." >" space ;
-: (.elements)  dup @type dom.element = if  .name  else  drop  then  false ;
+: .name  ( node -- )  ." <" @name type ." >" space ;
+: (.elements)  ( node -- flag )  element? if  .name  else  drop  then  false ;
 : .elements  ( node -- )  ['] (.elements) scan ;
-: .attribute  dup @name type ." =" @value type space ;
-: (.attributes)  dup @type dom.attribute = if  .attribute  else  drop  then  false ;
+: .attribute  ( node -- )  dup @name type ." =" @val type space ;
+: (.attributes)  ( node -- flag )  dup @type dom.attribute = if  .attribute  else  drop  then  false ;
 : .attributes  ( node -- )  ['] (.attributes) scan ;
-: .element  dup .attributes .elements ;
+: .element  ( node -- )  dup .attributes .elements ;
 : ?el ( node adr c n -- node true | false )
     locals| n c adr |
-    dup #children 0= if drop abort" element has no children" exit then 
     >first  begin  ?dup while
-        dup @type dom.element = if
+        element? if
             dup @name adr c compare 0=  n 0 = and if  true  exit then
             -1 +to n
         then
         >next
     repeat false ;
 : el  ( node adr c n -- node )  ?el 0= abort" child element not found" ;
+: eachel  ( node adr c xt -- )  ( ... node -- ... )
+    XT >r  to XT
+    2>r
+    >first  begin ?dup while
+        element? if
+            dup @name 2r@ compare 0= if  dup >r  XT execute  r>  then
+        then
+        >next
+    repeat
+    2r> 2drop
+    r> to XT ;
 : (?attr)  ( node adr c -- node true | false )
     locals| c adr |
-    dup #children 0= if drop abort" element has no children" exit then
     >first  begin  ?dup while
         dup @type dom.attribute = if
             dup @name adr c compare 0=  if  true  exit then
         then
         >next
     repeat false ;
-: ?attr$  ( node adr c -- adr c true | false )  (?attr) >r r@ if @value then r> ;
-: ?attr  ( node adr c -- node true | false )  (?attr) >r r@ if @value evaluate then r> ;
+: ?attr$  ( node adr c -- adr c true | false )  (?attr) >r r@ if @val then r> ;
+: ?attr  ( node adr c -- node true | false )  (?attr) >r r@ if @val evaluate then r> ;
 : attr ( node adr c -- n )  ?attr 0= abort" attribute not found" ;
 : attr$ ( node adr c -- adr c )  ?attr$ 0= abort" attribute not found" ;
 
