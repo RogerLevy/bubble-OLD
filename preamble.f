@@ -26,6 +26,7 @@
       decimal
       include xml
       include xml-utils
+      include xml2
       include base64
     poppath
   [then]
