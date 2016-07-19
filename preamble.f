@@ -5,9 +5,11 @@
 
 \ Forth Language-level Extensions
 
-  0 value o
-  : with  r>  o >r  swap to o  call  r> to o ;
-
+  [undefined] o [if]
+    0 value o
+    : with  r>  o >r  swap to o  call  r> to o ;
+  [then]
+  
   \ a directory scanner / file finder
   [undefined] qfolder [if]
     \ uncomment for linux:
@@ -26,8 +28,8 @@
   decimal
   include xml2
   include base64
-  poppath
   end-package
+  poppath
   [THEN]
 
   \ floating point
