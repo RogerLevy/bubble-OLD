@@ -5,6 +5,9 @@
 
 \ Forth Language-level Extensions
 
+  0 value o
+  : with  r>  o >r  swap to o  call  r> to o ;
+
   \ a directory scanner / file finder
   [undefined] qfolder [if]
     \ uncomment for linux:
@@ -12,23 +15,27 @@
     include engine\lib\qfolder\qfolder
   [then]
 
+  \ ffl DOM
+  [UNDEFINED] ffl.version [IF]
+  pushpath cd engine\lib\ffl-0.8.0
+  package ffling
+  private
+  include ffl/config.fs
+  public
+  include ffl/dom.fs
+  decimal
+  include xml2
+  include base64
+  poppath
+  end-package
+  [THEN]
+
   \ floating point
   [undefined] f+ [if]
     +opt
     warning on
     requires fpmath
     cr .( loaded: fpmath)
-  [then]
-
-  \ XML, Base64
-  [undefined] ffl.version [if]
-    pushpath cd engine\lib\ffl-0.8.0
-      decimal
-      include xml
-      include xml-utils
-      include xml2
-      include base64
-    poppath
   [then]
   
   \ Various extensions

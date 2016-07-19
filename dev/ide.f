@@ -277,9 +277,9 @@ transform baseline
 
 : ide/
   fs off
-  ['] noop is ui
-  ['] game-events is events
-  ['] game-frame is frame
+  \ ['] noop is ui
+  \ ['] game-events is events
+  \ ['] game-frame is frame
   previous-personality @ if close-personality then
 ;
 
@@ -293,7 +293,6 @@ transform baseline
   console-personality open-personality
   ide-piston
   fs on
-  focus on
   ok
   ide/
 ;

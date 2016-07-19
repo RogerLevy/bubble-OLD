@@ -1,6 +1,3 @@
-doming +order
-
-
 actor super
   var w            \ hitbox dimensions
   var h
@@ -39,13 +36,15 @@ include engine\saturn\task-sf.f
 
 : disporg  orgx 2v@ ;
 
+xmling +order
 decimal
   create lookupTbl  0 , 2 , 1 , 3 ,
   : tmx>aflip  cells lookupTbl + @ ;
-  : /flip  decimal " gid" @attr 30 >> tmx>aflip flip ! fixed ;
+  : /flip  decimal " gid" attr 30 >> tmx>aflip flip ! fixed ;
   : /depth  " zdepth" ?prop -exit  zdepth +! ;
   actor onMapLoad:  /flip /depth ;
 fixed
+xmling -order
 
 \ -----------------------------------------------------------------------------
 
@@ -115,8 +114,8 @@ top# bottom# left# right# or or or constant hitflags#
 
 \ -----------------------------------------------------------------------------
 \ some map data utilities
-doming +order
-: @dims  " width" @attr " height" @attr ;
+xmling +order
+: @dims  " width" attr " height" attr ;
 : /dims  ( -- )  @dims w 2v! ;
-doming -order
+xmling -order
 

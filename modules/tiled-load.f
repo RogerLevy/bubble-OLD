@@ -4,22 +4,18 @@ staticvar firstgid
 defer onLoadBox  ( pen=xy -- )
 :noname [ is onLoadBox ] cr ." WARNING: onLoadBox is not defined!" ;
 
-doming +order
+xmling +order
 
-staticvar 'onMapLoad
+staticvar 'onMapLoad  ( O=node -- )
 : onMapLoad:  ( class -- <code;> )  :noname swap 'onMapLoad ! ;
-: onMapLoad  ( -- )  me class @ 'onMapLoad @ execute ;
+: onMapLoad  ( O=node -- )  me class @ 'onMapLoad @ execute ;
 
 : gid>class  ( n -- class )
   locals| n |
   lastClass @
   begin  dup firstgid @ 1 - n u<  over prevClass @ 0 =  or  not while
     prevClass @
-  repeat  ; \ cr dup body> >name count type ;
-
-\ Here is where I think we detect the bgobj tileset and create our table,
-\ loading images as needed.
-\ don't forget to free any old images first and clear the table.
+  repeat  ;
 
 : clearbgimages
     bgObjTable 1024 0 do @+ ?dup if al_destroy_bitmap then loop  drop
@@ -28,81 +24,63 @@ staticvar 'onMapLoad
 : addBGImage  ( dest path c -- dest+cell )
     " data/maps/" s[ +s ]s zstring al_load_bitmap !+ ;
 
-: bgobjtiles ( dest type -- dest )
-    dom.element <> ?exit  nest  " image" ?sib drop  .node " source" @attr$ addBGImage  unnest ;
+: bgobjtile ( dest node -- dest )  " image" 0 el with  " source" attr$ addBGImage ;
 
-: bgobj?   " name" @attr$ " bgobj" compare 0= ;
+: bgobj?   " name" attr$ " bgobj" compare 0= ;
 
-: readTileset  ( -- )
-  " firstgid" @attr ( n )  " name" @attr$ script  ( class )  firstgid !
-  bgobj? -exit  clearbgimages  bgobjtable  ['] bgobjtiles drill  drop ;
+: readTileset  ( node -- )
+  with
+  " firstgid" attr   " name" attr$ script  firstgid !
+  bgobj? -exit  clearbgimages  bgobjtable  o " tile" ['] bgobjtile eachel  drop ;
 
 \ utility word ?PROP: read custom object property
+\ use the O register
 
-:noname  ( addr c type -- addr c flag )  \ check the name attribute of each property element til we find a match
-  dom.element = -exit  2dup " name" @attr compare 0= ;
+\ children only consists of elements called "property" so no need to check the names of the elements
+: (prop)  ( addr c node -- addr c  continue | node stop )
+  with  o element? -exit  2dup " name" attr$ compare 0= if O true else 0 then ;
 
-  \ only consists of elements called "property" so no need to check the names of the elements
-  : ?prop  ( addr c -- false | val true )
-    nest
-    " properties" ?sib  not if  unnest ( addr c ) 2drop false exit  then
-    [ literal ] search   nip nip if  " value" @attr  true  else  false then
-    unnest  unnest ;
+: ?prop$  ( addr c -- false | adr c )
+  o " properties" 0 ?el 0= if 2drop false exit then  ['] (prop) scan   nip nip  dup -exit  with " value" attr$ ;
 
-: *instance  ( -- )
-  cr ." ...CREATING INSTANCE "
-  " gid" @attr gid>class one
-  ." $" me h.
-  onMapLoad ;
-  
-: gidObject  ( -- )
-  cr ." GID OBJECT!!!"  .node  *instance ;
+: ?prop  ( adr c -- false | val true )  ?prop$ dup -exit  evaluate true ;
 
-: fixY  " height" @attr negate peny +! ;
+: instance  ( class -- )  one  onMapLoad ;
+: *instance  ( gid -- )  gid>class instance ;
 
-: readObject
-  " x" @attr " y" @attr  at
-  " name" attr? if
-    " gid" attr? if  fixY  then
-    " name" @attr$ cr ." EXECUTING: " 2dup type  evaluate
+: fixY  " height" attr negate peny +! ;
+
+: readObject  ( node -- )
+  with
+  " x" attr " y" attr  at
+  " gid" ?attr if  drop fixY  then
+  cr o .element 
+  " name" ?attr$ if  evaluate
   else
-    " gid" attr? if  " height" @attr negate peny +! gidObject
-                 else  cr ." BOX!!!!" .node onLoadBox  then
+    " gid" ?attr if  *instance
+                 else  onLoadBox  then
   then
 ;
-  \ read object.
-  \  collision rectangles have no gid.  some have a type, to make it slippery or dangerous.
-  \  actors have a gid.
 
-: objectGroupKids  ( type -- )
-  case
-    dom.attribute of
-      \ read group attributes.  just the name.  identifies the layer.  can skip, for now.
-    endof
-    dom.element of
-      " object" name? if  readObject  then
-    endof
-  endcase
-;
+: readObjectGroup  " object" ['] readObject eachel ;
 
-: mapKids ( type -- )
-  dom.element = if
-    " tileset" name? if  readTileset  then
-    " objectgroup" name? if  ['] objectGroupKids drill  then
-  then
-;
+: (tilesets)  " tileset" ['] readTileset eachel ;
+
+: (objgroups)  " objectgroup" ['] readObjectgroup eachel ;
 
 : clearGIDs  ( -- )
-  firstClass @  begin  ?dup while  #-1 over firstGID ! nextClass @  repeat ;
+  firstClass @  begin  ?dup while  #-1 over firstGID !  nextClass @  repeat ;
+
+0 value tmx
 
 : loadTMX  ( path count -- )
   me >r
   clearGIDs
-  file@  2dup read drop free throw
-  nest  " map" ?sib not abort" File is not TMX format!"
-  fixed  ['] mapKids drill  done
+  file@  2dup xml  to tmx
+    drop free throw
+  fixed
+  tmx " map" 0 ?el not abort" File is not TMX format!"
+    dup (tilesets) (objgroups)
   r> as ;
 
-
-doming -order
-
+xmling -order

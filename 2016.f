@@ -57,8 +57,6 @@ fixed
 : th  cells + ;
 : bit  dup constant  1 << ;
 -1 constant none
-0 value o
-: with  r>  o >r  swap to o  call  r> to o ;
 
 : overlap? ( xyxy xyxy -- flag )
   2swap 2rot rot > -rot <= and >r rot >= -rot < and r> and ;
