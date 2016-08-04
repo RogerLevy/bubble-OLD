@@ -33,11 +33,12 @@ dom-create dom
 : (.attributes)  ( node -- flag )  dup @type dom.attribute = if  .attribute  else  drop  then  false ;
 : .attributes  ( node -- )  ['] (.attributes) scan ;
 : .element  ( node -- )  dup .name dup .attributes .elements ;
+: name=  third @name compare 0= ;
 : ?el ( node adr c n -- node true | false )
     locals| n c adr |
     >first  begin  dup while
         dup element? if
-            dup @name adr c compare 0=  n 0 = and if true exit then
+            adr c name=  n 0 = and if true exit then
             -1 +to n
         then
         >next
@@ -48,18 +49,16 @@ dom-create dom
     2>r
     >first  begin ?dup while
         dup element? if
-            dup @name 2r@ compare 0= if  dup >r  XT execute  r>  then
+            2r@ name= if  dup >r  XT execute  r>  then
         then
         >next
     repeat
     2r> 2drop
     r> to XT ;
-: (?attr)  ( adr c -- node|false )
+: (?attr)  ( O=node adr c -- node|false )
     locals| c adr |
     O >first  begin  dup while
-        dup @type dom.attribute = if
-            dup @name adr c compare 0= ?exit
-        then
+        dup @type dom.attribute = if  adr c name= ?exit then
         >next
     repeat ;
 \ the following use the O register for the input node, to cut down on stack juggling.
