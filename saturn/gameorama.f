@@ -143,7 +143,7 @@ defer oneInit  ' noop is oneInit
 
 : script  ( adr c -- class )  \ load actor script if not loaded
   2dup forth-wordlist search-wordlist if  nip nip execute  else
-  2dup " obj/" s[ +s " .f" +s ]s included  evaluate  then ;
+  2dup " objpack-sc/" s[ +s " .f" +s ]s included  evaluate  then ;
 
 
 include engine/saturn/configs/default.f

@@ -41,7 +41,8 @@ staticvar 'onMapLoad  ( O=node -- )
   with  o element? -exit  2dup " name" attr$ compare 0= if O true else 0 then ;
 
 : ?prop$  ( addr c -- false | adr c )
-  o " properties" 0 ?el 0= if 2drop false exit then  ['] (prop) scan   nip nip  dup -exit  with " value" attr$ ;
+  o " properties" 0 ?el 0= if 2drop false exit then
+  ['] (prop) scan   nip nip  dup -exit  with " value" attr$ ;
 
 : ?prop  ( adr c -- false | val true )  ?prop$ dup -exit  evaluate true ;
 

@@ -1,22 +1,22 @@
 \ engine base
-include engine\saturn\gameorama
+include engine/saturn/gameorama
 
 \ graphics services
-include engine\modules\swes\sprites
+include engine/modules/swes/sprites
 \ include engine\modules\swes\tilesets
 \ include engine\modules\swes\tilemap
 \ include engine\modules\swes\tilemap-collision
 \ include engine\modules\swes\layers
 
 \ load other modules
-include engine\modules\stride2d
-include engine\modules\collision-grid
-include engine\modules\gameutils
-include engine\modules\wallpaper
-include engine\modules\tiled-load
+include engine/modules/stride2d
+include engine/modules/collision-grid
+include engine/modules/gameutils
+include engine/modules/wallpaper
+include engine/modules/tiled-load
 
 \ load engine specific stuff
-include engine\saturn\scripting.f
+include engine/saturn/scripting.f
 
 \ constants
 : extents  0 0 4096 4096 ;
@@ -29,16 +29,14 @@ actor single player
 variable 'dialog  \ for now this is just a flag.
 
 \ automatically load images and sounds.
-include engine\saturn\autodata
-
-\ game-specific data
-include data
+include engine/saturn/autodata
+include objpack-sc/data
 
 \ more engine specific stuff
-include engine\saturn\objects.f
-include engine\saturn\physics.f
-include engine\saturn\box.f
-include engine\saturn\load.f
+include engine/saturn/objects.f
+include engine/saturn/physics.f
+include engine/saturn/box.f
+include engine/saturn/load.f
 
 fixed
 
@@ -58,7 +56,7 @@ player as  " traveler" script become
 
 \ bubble stuff
 
-include obj\bubble
+include objpack-sc/bubble
 
 \ :proc bubbly  player 's x 2v@ at  me  bubble one  -1 vy !  as ;
 :task bubbly
@@ -86,7 +84,7 @@ variable bgbubbles  bgbubbles on
 
 \ -----------------------------------------------------------------------------
 
-include engine\saturn\zones.f
+include engine/saturn/zones.f
 
 \ --------------------------- camera/rendering --------------------------------
 
