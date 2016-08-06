@@ -9,7 +9,7 @@ fdrilling +order
 : (image)  >filename *image ;
 : (sound)  >filename *sound ;
 
-: auto-import ( -- <path> )
+: auto-load ( -- <path> )
     pushpath cd
     " images" ['] (image) fdrill
     " sounds" ['] (sound) fdrill

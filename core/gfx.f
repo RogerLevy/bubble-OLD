@@ -1,5 +1,7 @@
 \ some graphics helpers
 
+0 value #frames  \ frame counter, for cheap animation
+
 \ --------------------------- graphics services -------------------------------
 \ NTS: the pen should always function as a final translation stage
 \ NTS: add matrix words (as of 2/21 i'm going to keep things very basic.)

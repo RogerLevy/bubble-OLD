@@ -27,21 +27,9 @@
   not if  " Allegro: Couldn't initialize joystick." alert         -1 abort then
 
   al_create_event_queue  to eventq
-
-  r> call
-
-  displaytimer not if
-    1e
-      display al_get_display_refresh_rate s>p
-      ?dup 0= if 60 then
-      dup to fps
-      f f/ 1df al_create_timer
-        to displaytimer
-      eventq  displaytimer  al_get_timer_event_source    al_register_event_source
-      eventq                al_get_mouse_event_source    al_register_event_source
-      eventq                al_get_keyboard_event_source al_register_event_source
-  then
 ;
+
+assertAllegro
 
 \ -------------------- starting/stopping the frame timer ----------------------
 
@@ -64,6 +52,18 @@
   2i  al_create_display  to display
   al_create_builtin_font to defaultFont
   eventq  display       al_get_display_event_source  al_register_event_source
+
+  displaytimer not if
+    1e
+      display al_get_display_refresh_rate s>p
+      ?dup 0= if 60 then
+      dup to fps
+      f f/ 1df al_create_timer
+        to displaytimer
+      eventq  displaytimer  al_get_timer_event_source    al_register_event_source
+      eventq                al_get_mouse_event_source    al_register_event_source
+      eventq                al_get_keyboard_event_source al_register_event_source
+  then
   ;
 
 \ ------------------------ words for switching windows ------------------------
@@ -72,3 +72,8 @@
 : >gfx  ( - )  display al_get_win_window_handle focus ;                         \ force allegro display window to take focus
 : >ide  ( - )  HWND focus ;                                                     \ force the Forth prompt to take focus
 >ide
+
+
+\ some meta-compilation systems management stuff
+: teardown  display al_destroy_display ; \ al_uninstall_system ;
+: empty   teardown only forth empty ;

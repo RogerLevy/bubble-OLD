@@ -48,8 +48,8 @@ decimal
 : h?  @ h. ;
 : validate  ( id -- id true | false )  dup 0< not dup ?exit nip ;
 : reclaim  h ! ;
-: include   fixed include ;
-: included  fixed included ;
+: include   fixed include fixed ;
+: included  fixed included fixed ;
 : ]#  ] postpone literal ;
 : << lshift ;
 : >> rshift ;
@@ -92,8 +92,5 @@ create penx  0 ,  here 0 ,  constant peny
 : ifill  ( c-addr count val - )  -rot  0 do  over !+  loop  2drop ;
 : ierase   0 ifill ;
 : imove  ( from to count - )  cells move ;
-
-\ fixed point extensions
-include engine/fixext
 
 : time?  ucounter 2>r  execute  ucounter 2r> d-  d>s  i. ;                      ( xt - )  \ print time given XT takes in microseconds
