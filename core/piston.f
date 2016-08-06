@@ -11,6 +11,6 @@ variable renerr
 
 variable info  \ enables debugging mode display
 
-include engine\piston-internals
+include engine/core/piston-internals
 
 : ok  clearkb >gfx +timer  begin  frame  breaking?  until  -timer >ide  false to breaking? ;

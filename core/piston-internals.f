@@ -13,7 +13,7 @@ variable lag                                                                    
 : tick  poll  ['] sim catch simerr !  lag ++ ;
 : (render)  me >r  ?fs  ['] render catch renerr !  al_flip_display  r> as ;
 [else]
-: tick  poll  sim  (sweep)  lag ++ ;
+: tick  poll  sim  lag ++ ;
 : (render)  me >r  ?fs  render  al_flip_display  r> as ;
 [then]
 

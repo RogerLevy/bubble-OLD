@@ -1,6 +1,6 @@
 
 \ Core:
-include engine/core
+include engine/core/core
 
 \ -----------------------------------------------------------------------------
 
@@ -15,10 +15,8 @@ include engine/modules/fdrill
 \ -----------------------------------------------------------------------------
 fixed
 
-variable factor  2 factor !
 320 value gfxw                                                                  \ doesn't necessarily reflect the window size.
 240 value gfxh
-0 value #frames
 
 \ -----------------------------------------------------------------------------
 
@@ -35,9 +33,6 @@ create native  /ALLEGRO_DISPLAY_MODE /allot
 : displayh  display al_get_display_height s>p ;
 
 
-\ some meta-compilation systems management stuff
-: teardown  display al_destroy_display ; \ al_uninstall_system ;
-: empty   teardown only forth empty ;
 
 \ --------------------------------- keyboard ----------------------------------
 decimal

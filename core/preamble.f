@@ -89,7 +89,7 @@
       ' 2dup , \ GET-SIZE  ( -- x y )
       ' drop , \ ACCEPT    ( addr u1 -- u2)
 
-    : game-starter  null-personality open-personality " include toc ok bye" evaluate ;
+    : game-starter  null-personality open-personality " include main ok bye" evaluate ;
     \ Turnkey starter
 
     : refresh  " eventq al_flush_event_queue  rld  ok" evaluate ;
@@ -97,7 +97,6 @@
     gild
   [then]
 
-\ Some more entitlements
-include engine\2016
-
 /RND
+
+

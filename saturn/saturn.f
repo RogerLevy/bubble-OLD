@@ -3,10 +3,6 @@ include engine/saturn/gameorama
 
 \ graphics services
 include engine/modules/swes/sprites
-\ include engine\modules\swes\tilesets
-\ include engine\modules\swes\tilemap
-\ include engine\modules\swes\tilemap-collision
-\ include engine\modules\swes\layers
 
 \ load other modules
 include engine/modules/stride2d
@@ -28,15 +24,16 @@ actor single player
 #1 value cbit  \ collision flag counter
 variable 'dialog  \ for now this is just a flag.
 
-\ automatically load images and sounds.
+\ load global data
 include engine/saturn/autodata
-include objpack-sc/data
+auto-load data
 
 \ more engine specific stuff
 include engine/saturn/objects.f
 include engine/saturn/physics.f
 include engine/saturn/box.f
 include engine/saturn/load.f
+include engine/saturn/zones.f
 
 fixed
 
@@ -49,42 +46,11 @@ fixed
   ;
 
 
-player as  " traveler" script become
-  100 100 player put
-
-\ -----------------------------------------------------------------------------
-
-\ bubble stuff
-
-include objpack-sc/bubble
-
-\ :proc bubbly  player 's x 2v@ at  me  bubble one  -1 vy !  as ;
-:task bubbly
-  begin  player 's x 2v@ at  me  bubble one   1 2 rnd + expire
-    -1 vy !  as  3 frames again ;
-
-
-variable bgbubbles  bgbubbles on
-
-: *bgbubble
-  cam 's x 2v@  0 gfxh 2+  -70 10 2+  gfxw 140 + 0  somewhere at
-  me  bubble one  -1 vy !  1 0 0 1 !color  -100 zdepth +!    0 cflags !  0 cmask !
-  as ;
-
-:task bubblefx
-  begin  20 50 rnd + frames  bgbubbles @ if  *bgbubble  then  again ;
-
 : ?pointcull
   x 2v@ 2dup  cam 's x 2v@ 80 80 2-  gfxw gfxh 160 160 2+  2over 2+
   overlap? ?exit  me unload ;
 
-' ?pointcull bubble 'cull !
-
 : cull  0 stage all>  me class @ 'cull @ execute ;
-
-\ -----------------------------------------------------------------------------
-
-include engine/saturn/zones.f
 
 \ --------------------------- camera/rendering --------------------------------
 

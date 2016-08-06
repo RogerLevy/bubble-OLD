@@ -1,3 +1,9 @@
+[undefined] coreing [if] include engine/core/core [then]
+
+display not [if]
+  640 480 initDisplay
+[then]
+
 
 package ideing
 public
@@ -129,7 +135,7 @@ public
   etype ALLEGRO_EVENT_DISPLAY_RESIZE = -exit
   display al_acknowledge_resize ;
 
-: tick  focus @ not if  poll  then  ['] sim catch drop  sweep  lag ++ ;
+: tick  focus @ not if  poll  then  ['] sim catch drop  lag ++ ;
 : tick-event  etype ALLEGRO_EVENT_TIMER = -exit  tick  ;
 
 
@@ -137,7 +143,14 @@ public
 
 
 \ ----------------------------- console output --------------------------------
-nativew nativeh 2i al_create_bitmap value output
+
+create native  /ALLEGRO_DISPLAY_MODE /allot
+  al_get_num_display_modes #1 -  native  al_get_display_mode
+
+native 2v@ al_create_bitmap value output
+
+: nativew   native x@ s>p ;
+: nativeh   native y@ s>p ;
 
 : ?half  focus @ if 1 else 0.5 then ;
 
@@ -278,8 +291,12 @@ transform baseline
 : ide/
   fs off
   ['] noop is ui
+[defined] game-events [if]
   ['] game-events is events
+[then]
+[defined] game-frame [if]
   ['] game-frame is frame
+[then]
   previous-personality @ if close-personality then
 ;
 
