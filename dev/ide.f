@@ -182,6 +182,18 @@ create cursor  /cursor /allot  lmargin @ cursor x !
 : console-get-xy  cursor x 2v@ fontw fonth 2/ 2i ;
 : console-at-xy   2s>p fontw fonth 2* cursor x 2v! ;
 
+variable scrolling  scrolling on
+
+: clear  ( x y w h )
+  write-rgba blender>
+  al_get_target_bitmap  >r
+    output al_set_target_bitmap
+    2over 2+ 1 1 2+ 4af   0 1af dup dup dup  al_draw_filled_rectangle
+  r>  al_set_target_bitmap
+;
+
+: stack  0 nativeh 2 / fonth - fonth - nativew fonth clear    scrolling off  get-xy 2>r  0 nativeh 2 / fonth / 2 - 2i at-xy  .s  2r> at-xy  scrolling on ;
+
 : (scroll)
   write-rgba blender>
   al_get_target_bitmap
@@ -194,6 +206,7 @@ create cursor  /cursor /allot  lmargin @ cursor x !
 : console-cr
     lmargin @ cursor x !
     fonth cursor y +!
+    scrolling @ -exit
     cursor y @ bmargin @ >= if  (scroll)  then
 ;
 
@@ -291,6 +304,7 @@ transform baseline
   /baseline
   0  0 at  console
   320  nativeh 2 / fonth -  at  commandline
+  stack
   ;
 
 : ide/
