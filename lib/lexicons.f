@@ -9,6 +9,7 @@
 
 0 value lexicon
 
+
 : (update-lexicon)  ( lexicon -- )
   get-current !+  >r  get-order  dup r@ !  r> cell+ swap
     cells bounds swap cell- do  i !  -cell +loop ;
@@ -25,4 +26,4 @@
          does>  dup lexicon <> if  update-lexicon  then  (load-lexicon)
 ;
 
-
+: .lexicon  lexicon body> >name count type ;
