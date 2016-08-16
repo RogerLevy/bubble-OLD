@@ -4,6 +4,11 @@ display not [if]
   640 480 initDisplay
 [then]
 
+z" engine/dev/data/consolas16.png" al_load_bitmap_font constant consolas
+
+consolas constant sysfont
+8 constant fontw
+16 constant fonth
 
 package ideing
 public
@@ -168,40 +173,40 @@ public
 create ch  0 c, 0 c,
 variable lmargin  320 lmargin !
 variable rmargin  nativew 2 / rmargin !
-variable bmargin  nativeh 2 / 8 - 8 - bmargin !
+variable bmargin  nativeh 2 / fonth - fonth - bmargin !
 
 
 create cursor  /cursor /allot  lmargin @ cursor x !
 1 1 1 1 cursor color ~!+ ~!+ ~!+ ~!+ drop
 
-: console-get-xy  cursor x 2v@ 8 8 2/ 2i ;
-: console-at-xy   2s>p 8 8 2* cursor x 2v! ;
+: console-get-xy  cursor x 2v@ fontw fonth 2/ 2i ;
+: console-at-xy   2s>p fontw fonth 2* cursor x 2v! ;
 
 : (scroll)
   write-rgba blender>
   al_get_target_bitmap
     output al_set_target_bitmap
-    output 0 -8 2af 0 al_draw_bitmap
+    output 0 fonth negate 2af 0 al_draw_bitmap
   al_set_target_bitmap
-  -8 cursor y +!
+  fonth negate cursor y +!
 ;
 
 : console-cr
     lmargin @ cursor x !
-    8 cursor y +!
+    fonth cursor y +!
     cursor y @ bmargin @ >= if  (scroll)  then
 ;
 
 : (emit)
   ch c!
-    defaultFont
+    sysfont
     cursor color @+ swap @+ swap @+ swap @+ nip 4af
     cursor x 2v@ 2af
     0
     ch
       al_draw_text
 
-    8 cursor x +!
+    fontw cursor x +!
     cursor x @ rmargin @ >= if  console-cr  then
 ;
 
@@ -280,12 +285,12 @@ transform baseline
 : ?_  focus @ -exit  #frames 16 and -exit  s[ [char] _ c+s ]s ;
 
 : commandline
-  defaultFont  ?half dup dup 1 4af  at@ 2af  0  testbuffer count ?_ zstring  al_draw_text ;
+  sysfont  ?half dup dup 1 4af  at@ 2af  0  testbuffer count ?_ zstring  al_draw_text ;
 
 : ide-ui
   /baseline
   0  0 at  console
-  320  nativeh 2 / 8 -  at  commandline
+  320  nativeh 2 / fonth -  at  commandline
   ;
 
 : ide/
