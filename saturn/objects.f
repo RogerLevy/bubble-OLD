@@ -27,8 +27,8 @@ actor super
 
 extend actor
 
-include engine/saturn/object-color.f
-include engine/saturn/task-sf.f
+include engine/saturn/object-color
+include engine/saturn/task
 
 
 : hit>  r> code> 'hit ! ;
@@ -84,7 +84,7 @@ top# bottom# left# right# or or or constant hitflags#
 \   1f rot 1f f/ 1f rot 1f f/ 2sf swap ;
 
 : fitImage  ( image -- )
-  with  o bmp @  0 0 2af  o imageDims 2af  x 2v@ 2af  w 2v@ 2af  flip @
+  &o for>  o bmp @  0 0 2af  o imageDims 2af  x 2v@ 2af  w 2v@ 2af  flip @
     al_draw_scaled_bitmap ;
 
 : showSprite  ( spr# set# -- )

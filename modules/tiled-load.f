@@ -24,12 +24,12 @@ staticvar 'onMapLoad  ( O=node -- )
 : addBGImage  ( dest path c -- dest+cell )
     " data/maps/" s[ +s ]s zstring al_load_bitmap !+ ;
 
-: bgobjtile ( dest node -- dest )  " image" 0 el with  " source" attr$ addBGImage ;
+: bgobjtile ( dest node -- dest )  " image" 0 el  &o for>  " source" attr$ addBGImage ;
 
 : bgobj?   " name" attr$ " bgobj" compare 0= ;
 
 : readTileset  ( node -- )
-  with
+  &o for>
   " firstgid" attr   " name" attr$ script  firstgid !
   bgobj? -exit  clearbgimages  bgobjtable  o " tile" ['] bgobjtile eachel  drop ;
 
@@ -38,11 +38,11 @@ staticvar 'onMapLoad  ( O=node -- )
 
 \ children only consists of elements called "property" so no need to check the names of the elements
 : (prop)  ( addr c node -- addr c  continue | node stop )
-  with  o element? -exit  2dup " name" attr$ compare 0= if O true else 0 then ;
+  &o for>  o element? -exit  2dup " name" attr$ compare 0= if O true else 0 then ;
 
 : ?prop$  ( addr c -- false | adr c )
   o " properties" 0 ?el 0= if 2drop false exit then
-  ['] (prop) scan   nip nip  dup -exit  with " value" attr$ ;
+  ['] (prop) scan   nip nip  dup -exit  &o for>  " value" attr$ ;
 
 : ?prop  ( adr c -- false | val true )  ?prop$ dup -exit  evaluate true ;
 
@@ -52,7 +52,7 @@ staticvar 'onMapLoad  ( O=node -- )
 : fixY  " height" attr negate peny +! ;
 
 : readObject  ( node -- )
-  with
+  &o for>
   " x" attr " y" attr  at
   " gid" ?attr if  drop fixY  then
   cr o .element 
