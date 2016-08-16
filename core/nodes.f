@@ -87,23 +87,22 @@ fixed
   r> tail ! ;
 
 
-\ doesn't FREAKING WORK
 0 value cxt
 0 value xt
 : thru>  ( ... client-xt first-item -- <code> ... )  ( ... item -- ... next-item|0 )  ( ... item -- ... )
   r>  cxt >r  xt >r   code> to xt  swap to cxt
   ?dup if
     begin  dup >r  cxt execute  r> xt execute  dup 0= until
-  then
+  then  drop
   r> to xt  r> to cxt ;
 
 
 : itterate  ( ... xt list -- ... )   ( ... obj -- ... )
   first @  thru>  next @ ;
-\  first @  begin  dup while  dup next @ >r  over >r  swap execute  r> r> repeat  2drop ;
-: <itterate
+
+: <itterate  ( ... xt list -- ... )   ( ... obj -- ... )
   tail @  thru>  prev @ ;
-\  tail @  begin  dup while  dup prev @ >r  over >r  swap execute  r> r> repeat  2drop ;
+
 
 :noname  ( list node -- list )  over swap parent ! ; ( xt )
 
