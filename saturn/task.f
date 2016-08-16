@@ -1,4 +1,4 @@
-\ Actor tasking system.  SwiftForth implementation.
+\ Actor tasking system. 
 
 \ The following words should only be used within a task:
 \  YIELD END FRAMES SECS
