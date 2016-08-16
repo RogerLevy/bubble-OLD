@@ -7,6 +7,7 @@ include engine/core/core
 fixed
 64 16 + cells struct /actorslot
 
+include engine/modules/image
 include engine/modules/rects
 include engine/modules/id-radixsort
 include engine/modules/templist
