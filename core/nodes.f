@@ -42,11 +42,12 @@ end-package
 create node  here dup firstClass ! lastClass !
   0 , ( isize ) , /class ,  14 cells /allot
 
+node super  xvar length  xvar first  xvar tail   class container
+
 : sizeof  isize @ ;                                                             ( obj -- i )
 : obj  here swap  dup ,  isize @ cell- /allot ;                                 ( class -- obj )
-: list  create  0 ( length ) , 0 ( first ) , 0 ( tail ) , ;
+: list  create  container obj drop ;
 
-0  xvar length  xvar first  xvar tail   drop                                    \ internal
 
 fixed
 
@@ -84,10 +85,25 @@ fixed
     over prev !  dup r@ tail @ next !
   then
   r> tail ! ;
+
+
+\ doesn't FREAKING WORK
+0 value cxt
+0 value xt
+: thru>  ( ... client-xt first-item -- <code> ... )  ( ... item -- ... next-item|0 )  ( ... item -- ... )
+  r>  cxt >r  xt >r   code> to xt  swap to cxt
+  ?dup if
+    begin  dup >r  cxt execute  r> xt execute  dup 0= until
+  then
+  r> to xt  r> to cxt ;
+
+
 : itterate  ( ... xt list -- ... )   ( ... obj -- ... )
-  first @  begin  dup while  dup next @ >r  over >r  swap execute  r> r> repeat  2drop ;
+  first @  thru>  next @ ;
+\  first @  begin  dup while  dup next @ >r  over >r  swap execute  r> r> repeat  2drop ;
 : <itterate
-  tail @  begin  dup while  dup prev @ >r  over >r  swap execute  r> r> repeat  2drop ;
+  tail @  thru>  prev @ ;
+\  tail @  begin  dup while  dup prev @ >r  over >r  swap execute  r> r> repeat  2drop ;
 
 :noname  ( list node -- list )  over swap parent ! ; ( xt )
 
