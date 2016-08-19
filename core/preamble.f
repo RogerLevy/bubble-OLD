@@ -11,11 +11,6 @@
     : for>  ( val addr -- )  r>  -rot  dup dup >r @ >r  !  call  r> r> ! ;
   [then]
   
-  [undefined] create-lexicon [if]
-    include engine\lib\lexicons.f
-  [then]
-
-
   \ a directory scanner / file finder
   [undefined] qfolder [if]
     \ uncomment for linux:
