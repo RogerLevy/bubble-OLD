@@ -1,4 +1,4 @@
-\ package system
+\ better package system
 
 \ idioms have:
 \  a parent idiom
@@ -36,14 +36,14 @@ variable 'idiom
 variable breadth  8 breadth !
 variable importing
 
-wordlist
-create forth-idiom
-  0 , forth-wordlist , ( wordlist ) , 0 ,
+\ wordlist
+\ create forth-idiom
+\   0 , forth-wordlist , ( wordlist ) , 0 ,
 
 : /idiom  5 cells breadth @ cells + ;
 : @parent  'idiom @ @ ;
 : @publics 'idiom @ cell+ @ ;
-: >publics  cell+ @ ;
+: >publics  ?dup if  cell+ @  ?dup ?exit  then  forth-wordlist ;
 : @privates 'idiom @ cell+ cell+ @ ;
 : others>  'idiom @ cell+ cell+ cell+ ;  \ count , idiom , idiom ....
 
@@ -53,9 +53,9 @@ create forth-idiom
 : .idiom
   cr
   'idiom @ 0= if  ." NO CURRENT IDIOM."  exit  then
-  space 'idiom @ .name
-  space ." PARENT: " @parent ?dup if  .name  else  ." NONE " then
-  space ." IMPORTED: "
+  space ." IDIOM: " 'idiom @ .name
+  \ space ." PARENT: " @parent ?dup if  .name  else  ." NONE " then
+  space ." IMPORTS: "
   others> @+ ?none  0 ?do  @+ .name  loop
   drop
   @parent -exit
@@ -82,41 +82,44 @@ create forth-idiom
 
 : get-idiom  'idiom @ ;
 
+: global  only forth definitions  'idiom off ;
 
-: set-idiom  'idiom !  forth-wordlist  1  'idiom @ wordlists+  @privates -rot  1 +   set-order ;
+: set-idiom  ?dup 0= if global exit then  'idiom !  forth-wordlist  1  'idiom @ wordlists+  @privates -rot  1 +   set-order ;
 
 : extend-idiom  'idiom @ swap ! ;
 
 : (idiom)
   here  /idiom /allot  8 breadth !
-  ( idiom )  importing @ not if  dup extend-idiom  then   'idiom !
+  ( idiom )  dup extend-idiom  'idiom !
   wordlist 'idiom @ cell+ !
   wordlist 'idiom @ cell+ cell+ !
-  'idiom @ set-idiom ;
+  'idiom @ set-idiom  public ;
 
-: set/stop  ( idiom )
-  importing @ if    'idiom !  \\  \ <-- cancel intepretation of current file
-              else  set-idiom  public  then ;  \   <-- allow adding more stuff
 : idiom
-  >in @  defined if  nip  >body  set/stop  exit then
-  drop  >in !
-  create  (idiom)  public  does>  set-idiom  public ;
+  >in @  defined  if   nip  >body  importing @ if  'idiom ! \\ exit
+                                               else  set-idiom  public  exit  then
+                  else  drop  >in !  then
+  create  (idiom)  does>  set-idiom  public ;
 
-: import   get-current >r  importing @ >r  get-idiom >r  ['] include catch  'idiom @ r@ add-idiom  r> set-idiom  r> importing !  r> set-current  throw ;
+: import   get-current >r  get-idiom >r  importing @ >r  importing on  ['] include catch  r> importing !  throw  'idiom @ r@ add-idiom  r> set-idiom  r> set-current ;
 : include  get-current >r  get-idiom >r  include  r> set-idiom  r> set-current ;
 
-: global  only forth definitions  'idiom off ;
 
-
+\ create an exposed wordlist out of @publics or @privates in the parent's public wordlist.
+\ useful for creating wordlists that can be cherrypicked onto the search order in special cases.
+: export-wordlist  ( wordlist -- <name> )
+  get-current >r  @parent >publics set-current  constant
+  r> set-current ;
 
 marker discard
-idiom i1
-i1
-import test/bear
-import test/fox
-.idiom
-idiom i2
-i2
-.idiom
+  idiom i1
+  i1
+  import test/bear
+  import test/fox
+  .idiom
+  idiom i2
+  i2
+  .idiom
+discard
 
-\ discard
+global
