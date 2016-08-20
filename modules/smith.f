@@ -1,3 +1,6 @@
+[core] idiom [smith]
+import engine\modules\safetable
+
 \ SMW-style level data building lexicon
 
 \ - levels stored as human-readable source
@@ -20,9 +23,7 @@
 \  - Semantics for defining BG and Actor object types
 
 
-[undefined] safetable [if]  include engine\modules\safetable  [then]
 
-package smithdata
 \ NTS: this is an opportunity to save memory if ever needed.  i've already
 \  created generic rect words.  we could redefine the internal representation
 \  of map objects to take up just a few bytes instead of 24.  (useful for an
@@ -55,6 +56,5 @@ cell safetable actorObjTable      \ table of classes  ( attr  class -- )  <- sin
 
 ;
   
-end-package
 
 

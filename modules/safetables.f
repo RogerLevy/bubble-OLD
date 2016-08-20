@@ -1,3 +1,4 @@
+[core] idiom [safetables]
 fixed
 
 \ safe tables are allocated using the system heap so that they can grow

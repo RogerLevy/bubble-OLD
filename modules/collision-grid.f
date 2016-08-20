@@ -1,3 +1,6 @@
+[core] idiom [cgrid]
+@privates export-wordlist cgriding
+
 fixed
 
 \ Fast collision manager object.  Does efficient collision checks of massive
@@ -11,7 +14,6 @@ fixed
 \ Todo:
 \ [ ] add cmask and cflag vars to cbox struct?
 
-package cgridding public
 
 0 value cgrid  \ current cgrid
 
@@ -156,5 +158,4 @@ public
 : cgridSize  ( cgrid -- w h )
   to cgrid  cols 2v@  sectw secth 2* ;
 
-end-package
 

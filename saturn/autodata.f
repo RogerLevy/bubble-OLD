@@ -1,4 +1,4 @@
-fdrilling +order
+import engine/modules/fdrill
 
 : *image  ( poth count -- )
     " image " s[ 2dup -ext -path +s " .image " +s +s ]s cr 2dup type evaluate ;
@@ -15,4 +15,3 @@ fdrilling +order
     " sounds" ['] (sound) fdrill
     poppath ;
 
-fdrilling -order

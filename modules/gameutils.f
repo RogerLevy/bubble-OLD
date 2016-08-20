@@ -1,3 +1,6 @@
+[core] idiom [gameutils]
+fixed
+
 : 4dup  2over 2over ;
 
 decimal

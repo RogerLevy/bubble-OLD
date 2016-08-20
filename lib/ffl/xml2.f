@@ -1,12 +1,15 @@
 \ better XML handling.
 \ only read words for now (7/17/2016)
 
-only forth definitions
-
 [defined] decimal [if] decimal [then]
 
+[undefined] dom-create [if]
+  include ffl/dom.fs
+[then]
 
-package xmling
+global idiom [xml]
+@publics export-wordlist xmling
+
 dom-create dom
 
 \ the node in here is different from the one defined in nodes.f
@@ -69,4 +72,5 @@ dom-create dom
 
 \ : text ( node -- adr c ) ;
 
-end-package
+
+

@@ -1,4 +1,4 @@
-[undefined] coreing [if] include engine/core/core [then]
+[core]
 
 display not [if]
   640 480 initDisplay
@@ -10,8 +10,8 @@ consolas constant sysfont
 8 constant fontw
 16 constant fonth
 
-package ideing
-public
+variable factor  2 factor ! 
+
 
 \ design:
 \  - when the IDE is loaded, we enter fullscreen and override the piston's main
@@ -336,4 +336,3 @@ transform baseline
 : rld  ide/  rld ;
 : empty  ide/  empty ;
 
-end-package
