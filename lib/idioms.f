@@ -67,8 +67,8 @@
 \    In a file, enter any "predecessor" idiom (or say `GLOBAL`) and then declare/extend an idiom.
 \    If you `IMPORT` this file, it will be imported into the current idiom in the importing file.
 \    If you `INCLUDE` this file, it will NOT be imported.
-\    In both cases, the name of the isolated idiom will only be available in its parent.
-\    Therefore, it can only be imported by "related" idioms.
+\    In both cases, the name of the isolated idiom will only be available in its parent, itself,
+\       and its decendents.  Therefore, it can only be imported by "related" idioms.
 \  Encapsulate:
 \    The idioms imported by an idiom, and its parents, are NOT imported along with it
 \    when impored into another idiom.  Only its public words.
