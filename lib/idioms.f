@@ -83,6 +83,7 @@
 variable 'idiom
 variable breadth  8 breadth !
 variable importing
+variable declared  \ last declared idiom (created, extended, or imported)
 
 \ wordlist
 \ create forth-idiom
@@ -138,19 +139,19 @@ variable importing
 
 : (idiom)
   here  /idiom /allot  8 breadth !
-  ( idiom )  dup extend-idiom  'idiom !
+  ( idiom )  dup extend-idiom  dup 'idiom !  declared !
   wordlist 'idiom @ cell+ !
   wordlist 'idiom @ cell+ cell+ !
   'idiom @ set-idiom  public ;
 
 : idiom
-  >in @  defined  if   nip  >body  importing @ if  'idiom ! \\ exit
-                                               else  set-idiom  public  exit  then
+  >in @  defined  if   nip  >body  importing @ if  declared ! \\ exit              \ already defined, importing     => cancel compilation
+                                               else  set-idiom  public  exit  then \ already defined, not importing => enter / don't create
                   else  drop  >in !  then
-  create  (idiom)  does>  set-idiom  public ;
+  create  (idiom)  does>  set-idiom  public ;                                      \ not defined, create
 
-: import   get-current >r  get-idiom >r  importing @ >r  importing on  ['] include catch  r> importing !  throw  'idiom @ r@ add-idiom  r> set-idiom  r> set-current ;
-: include  get-current >r  get-idiom >r  include  r> set-idiom  r> set-current ;
+: import   declared @ >r  get-current >r  get-idiom >r  importing @ >r  importing on  ['] include catch  r> importing !  throw  declared @ r@ add-idiom  r> set-idiom  r> set-current  r> declared ! ;
+: include  declared @ >r  get-current >r  get-idiom >r  include  r> set-idiom  r> set-current  r> declared ! ;
 
 
 \ create an exposed wordlist out of @publics or @privates in the parent's public wordlist.
