@@ -1,4 +1,8 @@
-[undefined] safetable [if] include engine/modules/safetables [then]
+[core] idiom [swes]
+[swes] idiom [sprites]
+
+import engine/modules/safetables
+import engine/modules/image
 
 fixed
 

@@ -1,7 +1,8 @@
+[core] idiom [fdrill]
 \ simplified directory walker
 
-package fdrilling
-    : >filename  .filename zcount ;
+: >filename  .filename zcount ;
+private
 
     0 value xt
     : (fdrill)  ( handle param -- stop? )
@@ -12,4 +13,3 @@ public
     xt >r  to xt
     ['] (fdrill) 0 directorieswalker1
     r> to xt ;
-end-package

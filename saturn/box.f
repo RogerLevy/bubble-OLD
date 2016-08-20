@@ -7,12 +7,12 @@ actor super class box
 : (*box)  ( w h -- )  box one  w 2v!  /cbox ;
 : ?box  ( w h -- ) either0 not if  (*box)  else  2drop  then ;
 
-get-order xmling +order cgridding +order
+import engine/modules/collision-grid
 
+cgriding +order
     : *box  ( pen=xy w h -- )  ['] ?box  -rot   at@ 2+  sectw secth  stride2d ;
     :noname [ is onLoadBox ]
         @dims *box ;
-  
-set-order
+cgriding -order
 
 box start:  static# flags or! ;

@@ -1,17 +1,24 @@
+include engine/core/core
+
+#50 breadth !  [core] idiom [saturn]
+fixed
+
 \ engine base
 include engine/saturn/gameorama
 
 \ graphics services
-include engine/modules/swes/sprites
+import engine/modules/swes/sprites
+
+[saturn]
 
 \ load other modules
-include engine/modules/stride2d
-include engine/modules/collision-grid
-include engine/modules/gameutils
-include engine/modules/wallpaper
-include engine/modules/tiled-load
+import engine/modules/stride2d
+import engine/modules/collision-grid
+import engine/modules/gameutils
 
 \ load engine specific stuff
+include engine/saturn/wallpaper
+import engine/saturn/tiled-load
 include engine/saturn/scripting.f
 
 \ constants
@@ -36,6 +43,7 @@ include engine/saturn/load.f
 include engine/saturn/zones.f
 
 fixed
+
 
 
 :noname [ is oneInit ]

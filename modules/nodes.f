@@ -1,3 +1,5 @@
+[core] idiom [nodes]
+
 decimal
 
 \ /CLASS supports rudimentary static vars for classes.
@@ -17,7 +19,10 @@ decimal
 variable firstClass
 variable lastClass
 
-package classing
+
+wordlist constant classing
+classing +order
+get-current classing set-current
   : (class-min-size)  14 cells  /class cell- cell- max ;
   : class   ( super isize -- <name> )
     create
@@ -26,7 +31,8 @@ package classing
     ( super ) cell+ cell+   here  (class-min-size)  move  (class-min-size)  /allot
     classing -order ;
   : extend  class ; 
-end-package
+set-current
+classing -order
 
 : super  dup isize @  classing +order ;        ( class -- super isize )
 \ : extend  !  classing -order ;

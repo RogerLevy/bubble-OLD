@@ -1,5 +1,5 @@
+[core] idiom [idradix]
 fixed
-
 \ 16-bit positive-integer-fixed-point-identifier optimized radix sort!
 \ supports sorting a range of numbers between and including 0 ~ 65535
 
@@ -30,7 +30,6 @@ fixed
 : dest!  to dest ;
 [then]
 
-package rsorting
 private
   $0000f000 constant nyb0
   nyb0 value radix
@@ -47,7 +46,6 @@ private
   create table1  #max cells 16 * allot
   \ 0 value table0
   \ 0 value table1
-
 
   table0 value table
 
@@ -79,11 +77,12 @@ private
 
 public
 : irsort  ( source count xt -- )  \ result is placed in source, XT is @KEY
-over 0= if 2drop drop exit then
-\ /radix
-irinit  over src!  irpass  radix++
-tablepass tablepass tablepass
-src dest!  !result
+  over 0= if 2drop drop exit then
+  \ /radix
+  irinit  over src!
+    irpass  radix++
+    tablepass tablepass tablepass
+  src dest!  !result
 ; \ radix/ ;
 
 
@@ -92,6 +91,7 @@ src dest!  !result
 marker dispose
 create sortable  4123 , 9 , 5 , 1 , 401 , 234 , 100 , 5 , 99 , 4123 , 23 , 3 , 400 , 50 ,
 : test  <> abort" radix sort test failed!" ;
+
 \ hex sortable 14 cells idump fix
 sortable 14 ' noop irsort
 \ hex sortable 14 cells idump fix
@@ -113,4 +113,3 @@ sortable
 drop
 dispose
 
-end-package
