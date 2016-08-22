@@ -1,15 +1,19 @@
 only forth definitions
 
-[defined] decimal [if] decimal [then]
+pushpath cd engine\lib\ffl-0.8.0
 
-package ffling
-private
-  [UNDEFINED] ffl.version [IF]
-    include ffl/config.fs
-  [THEN]
-public
-  include ffl/b64.fs
-end-package
+decimal
+
+
+global ffling +order
+include ffl/b64.fs
+ffling -order
+
+decimal
+
+global
 
 : 64,  ( base64-src count -- )
   str-new >r  r@ b64-decode here over allot swap move  r> str-free ;
+
+poppath
