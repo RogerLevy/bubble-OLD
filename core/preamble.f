@@ -9,6 +9,8 @@
     0 value o
     &of o constant &o
     : for>  ( val addr -- )  r>  -rot  dup dup >r @ >r  !  call  r> r> ! ;
+
+    : reverse   ( ... count -- ... ) 1+ 1 max 1 ?do i 1- roll loop ;
   [then]
 
   [undefined] idiom [if]
