@@ -1,5 +1,7 @@
 decimal
 
+[core] idiom [nodes]
+
 \ /CLASS supports rudimentary static vars for classes.
 \  static vars are not inherited.  they have to be set for each individual class
 \  as needed.  NTS: implement proper static var inheritence later if needed

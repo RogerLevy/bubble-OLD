@@ -1,7 +1,6 @@
 include engine/core/preamble         \ base dependencies, incl. Allegro, loaded once per session
 
-package coreing
-public
+global idiom [core]
 
 include engine/core/2016             \ entitlements
 include engine/core/fixext           \ fixed point extensions
@@ -11,6 +10,4 @@ include engine/core/input            \ allegro input support words
 include engine/core/piston           \ the main loop
 include engine/core/allegro-floats   \ utility words for passing floats to allegro
 include engine/core/gfx              \ baseline graphics helpers (bitmap, image, subimage)
-include engine/core/nodes            \ classed nodes.  is a module to facilitate future incompatible forks.
 
-end-package

@@ -1,12 +1,9 @@
-
-\ Core:
-include engine/core/core
-
 \ -----------------------------------------------------------------------------
 
 fixed
 64 16 + cells struct /actorslot
 
+import  engine/modules/nodes
 include engine/modules/image
 include engine/modules/rects
 include engine/modules/id-radixsort
