@@ -1,8 +1,6 @@
-[core] idiom [swes]
-[swes] idiom [tilemap]
-
 fixed
 
+package tilemaping
 public
 0 value tileSrc  \ image
 : >tileSrc  ( id -- ) >tileset to tileSrc ;
@@ -18,3 +16,4 @@ public
 : px>tile ( x y -- col row )  tilew tileh 2/ 2pfloor ;
 \ get relative col/row within tilemap using tilesrc
 : scrolled  ( scrollx scrolly -- )  2dup tilew tileh 2mod 2negate at  px>tile ;
+end-package

@@ -1,17 +1,10 @@
-
-[saturn] idiom [tiled]
-
-pushpath cd engine\lib\ffl
-    import xml2
-poppath
-fixed
-
 create bgObjTable 1024 cells /allot \ bitmaps
 staticvar firstgid
 
 defer onLoadBox  ( pen=xy -- )
 :noname [ is onLoadBox ] cr ." WARNING: onLoadBox is not defined!" ;
 
+xmling +order
 
 staticvar 'onMapLoad  ( O=node -- )
 : onMapLoad:  ( class -- <code;> )  :noname swap 'onMapLoad ! ;
@@ -91,3 +84,4 @@ staticvar 'onMapLoad  ( O=node -- )
     dup (tilesets) (objgroups)
   r> as ;
 
+xmling -order

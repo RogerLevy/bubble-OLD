@@ -1,4 +1,3 @@
-[core] idiom [2Darrays]
 
 \ ----------------------------- 2d arrays support -----------------------------
 fixed
@@ -17,6 +16,7 @@ fixed
 \ ---------------------------------- array2d ----------------------------------
 fixed
 
+package array2ding
 
 public
   node super  xvar numcols  xvar numrows  0 xfield data
@@ -82,3 +82,4 @@ b count2d 10 ifill
 dispose
 
 
+end-package

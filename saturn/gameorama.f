@@ -1,20 +1,20 @@
+\ -----------------------------------------------------------------------------
+
 fixed
 64 16 + cells struct /actorslot
 
-import engine/modules/id-radixsort
-import engine/modules/nodes            \ OO nodes
-import engine/modules/image
-import engine/modules/rects
-import engine/modules/templist
-import engine/modules/fdrill
+import  engine/modules/nodes
+include engine/modules/image
+include engine/modules/rects
+include engine/modules/id-radixsort
+include engine/modules/templist
+include engine/modules/fdrill
 
 \ -----------------------------------------------------------------------------
 fixed
 
 320 value gfxw                                                                  \ doesn't necessarily reflect the window size.
 240 value gfxh
-
-variable factor 2 factor !
 
 \ -----------------------------------------------------------------------------
 

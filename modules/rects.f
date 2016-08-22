@@ -1,5 +1,3 @@
-[core] idiom [rect]
-fixed
 
 4 cells struct /rect
 : rect  ( x y w h -- <name> ) create  2swap swap , , swap , , ;
