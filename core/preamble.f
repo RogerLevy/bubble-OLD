@@ -10,6 +10,10 @@
     &of o constant &o
     : for>  ( val addr -- )  r>  -rot  dup dup >r @ >r  !  call  r> r> ! ;
   [then]
+
+  [undefined] idiom [if]
+    include engine\lib\idiom
+  [then]
   
   \ a directory scanner / file finder
   [undefined] qfolder [if]
