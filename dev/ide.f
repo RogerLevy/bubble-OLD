@@ -1,8 +1,11 @@
-[undefined] coreing [if] include engine/core/core [then]
+undefined [core] [if] include engine/core/core [then]
+
 
 display not [if]
   640 480 initDisplay
 [then]
+
+[core] idiom [ide]
 
 z" engine/dev/data/consolas16.png" al_load_bitmap_font constant consolas
 
@@ -10,8 +13,6 @@ consolas constant sysfont
 8 constant fontw
 16 constant fonth
 
-package ideing
-public
 
 \ design:
 \  - when the IDE is loaded, we enter fullscreen and override the piston's main
@@ -76,9 +77,10 @@ create history  #256 /allot
 : rub       testbuffer c@  #-1 +  0 max  testbuffer c! ;
 
 : ?.catch  ?dup -exit .catch ;
-: obey  store  ['] interp catch ?.catch cr testbuffer off  ;
+: obey     store  ['] interp catch ?.catch cr testbuffer off  ;
 
 include engine\lib\win-clipboard.f
+fixed
 
 : paste     clpb testbuffer append ;
 
@@ -102,9 +104,9 @@ variable focus
     [char] p of  pause toggle  endof
   endcase ;
 
-private
+_private
   : ctrl?  e ALLEGRO_KEYBOARD_EVENT-modifiers @ ALLEGRO_KEYMOD_CTRL and ;
-public
+_public
 
 : kb-events
   etype case
@@ -161,13 +163,13 @@ native 2v@ al_create_bitmap value output
 
 : console  output  1 1 1 ?half  4af  at@ 2af  0  al_draw_tinted_bitmap ;
 
-private
+_private
 0
   xvar x
   xvar y
   4 cells xfield color
 struct /cursor
-public
+_public
 
 
 create ch  0 c, 0 c,
@@ -211,7 +213,7 @@ variable scrolling  scrolling on
 ;
 
 : (emit)
-  ch c!
+  ch c!  0 ch #1 + c!
     sysfont
     cursor color @+ swap @+ swap @+ swap @+ nip 4af
     cursor x 2v@ 2af
@@ -231,8 +233,16 @@ variable scrolling  scrolling on
 ;
 
 decimal
-: console-type  0 ?do  dup c@ console-emit 1 +  loop  drop ;
+: console-type  bounds  do  i @ console-emit  loop ;
 fixed
+
+create colors
+  1 , 1 , 1 , 1 ,
+  0 , 0 , 0 , 1 ,
+  0.3 , 1 , 0.3 , 1 ,
+  1 , 1 , 0.3 , 1 ,
+: (attribute)
+  s>p 4 cells * colors + @+ swap @+ swap @+ swap @ #4 reverse cursor color ~!+ ~!+ ~!+ ! ;
 
 
 create console-personality
@@ -245,7 +255,7 @@ create console-personality
   ' console-type , \ ?TYPE     ( addr len -- )
   ' console-cr , \ CR        ( -- )
   ' noop , \ PAGE      ( -- )
-  ' drop , \ ATTRIBUTE ( n -- )
+  ' (attribute) , \ ATTRIBUTE ( n -- )
   ' dup , \ KEY       ( -- char )
   ' dup , \ KEY?      ( -- flag )
   ' dup , \ EKEY      ( -- echar )
@@ -259,8 +269,10 @@ create console-personality
 
 \ -------------------------------- IDE display --------------------------------
 
-private  variable cx variable cy variable cw variable ch
-public
+_private
+  variable cx variable cy variable cw variable ch
+_public
+
 : framed
   cx cy cw ch al_get_clipping_rectangle
   0 0 #640 #480 al_set_clipping_rectangle   execute
@@ -336,4 +348,3 @@ transform baseline
 : rld  ide/  rld ;
 : empty  ide/  empty ;
 
-end-package
