@@ -63,8 +63,8 @@ variable importing
   @parent 'idiom ! recurse
   r> 'idiom ! ;
 
-: private  @privates set-current ;
-: public   @publics  set-current ;
+: _private  @privates set-current ;
+: _public   @publics  set-current ;
 
 : add-idiom  ( idiom idiom-target -- )
   'idiom @ >r   'idiom !
@@ -93,13 +93,13 @@ variable importing
   ( idiom )  dup extend-idiom  'idiom !
   wordlist 'idiom @ cell+ !
   wordlist 'idiom @ cell+ cell+ !
-  'idiom @ set-idiom  public ;
+  'idiom @ set-idiom  _public ;
 
 : idiom
   >in @  defined  if   nip  >body  importing @ if  'idiom ! \\ exit
-                                               else  set-idiom  public  exit  then
+                                               else  set-idiom  _public  exit  then
                   else  drop  >in !  then
-  create  (idiom)  does>  set-idiom  public ;
+  create  (idiom)  does>  set-idiom  _public ;
 
 : import   get-current >r  get-idiom >r  importing @ >r  importing on  ['] include catch  r> importing !  throw  'idiom @ r@ add-idiom  r> set-idiom  r> set-current ;
 : include  get-current >r  get-idiom >r  include  r> set-idiom  r> set-current ;
