@@ -24,16 +24,10 @@
 
   \ ffl DOM
   [UNDEFINED] ffl.version [IF]
-  pushpath cd engine\lib\ffl-0.8.0
-  package ffling
-  private
-  include ffl/config.fs
-  public
-  include ffl/dom.fs
-  decimal
-  include xml2
-  include base64
-  end-package
+  include engine\lib\ffl-0.8.0\ffl
+  include engine\lib\ffl-0.8.0\xml2
+  include engine\lib\ffl-0.8.0\base64
+  global
   poppath
   [THEN]
 
