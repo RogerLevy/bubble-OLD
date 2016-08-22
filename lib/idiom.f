@@ -71,20 +71,33 @@ variable importing
   others> @+ cells + !  1 others> +!
   r> 'idiom ! ;
 
-: wordlists+  ( ...wordlists... count idiom -- ...wordlists... count )
+: wordlists-  ( idiom -- )
   'idiom @ >r  'idiom !
-  @parent ?dup if  recurse  then  \ add parents' stuff first!
-  others> @+ ?dup if  cells bounds swap cell- do  i @ >publics  swap 1 +  -cell +loop
-                  else  drop  then 
-  @publics swap 1 +
+  @publics -order
+  others> @+ ?dup if  cells bounds do  i @ >publics -order  cell +loop
+                  else  drop  then
+  @parent ?dup if  recurse  then  \ remove parents' stuff!
   r> 'idiom ! ;
 
+: wordlists+  ( idiom -- )
+  'idiom @ >r  'idiom !
+  @parent ?dup if  recurse  then  \ add parents' stuff first!
+  others> @+ ?dup if  cells bounds swap cell- do  i @ >publics +order  -cell +loop
+                  else  drop  then 
+  @publics +order
+  r> 'idiom ! ;
 
 : get-idiom  'idiom @ ;
 
 : global  only forth definitions  'idiom off ;
 
-: set-idiom  ?dup 0= if global exit then  'idiom !  forth-wordlist  1  'idiom @ wordlists+  @privates -rot  1 +   set-order ;
+: unset-idiom  'idiom @ ?dup -exit  wordlists-  @privates -order  'idiom off ;
+
+: set-idiom
+  ?dup 0= if global exit then
+  only forth
+  'idiom !  'idiom @ wordlists+
+  @publics -order  @privates +order  @publics +order ;
 
 : extend-idiom  'idiom @ swap ! ;
 
@@ -101,12 +114,17 @@ variable importing
                   else  drop  >in !  then
   create  (idiom)  does>  set-idiom  _public ;
 
+: strip-order  get-idiom >r unset-idiom forth-wordlist -order get-order forth-wordlist +order r> set-idiom ;
+
+
+: +orders  dup >r  reverse  r>  0 ?do  +order  loop ;
+
 : import
   'idiom @ 0= abort" Can't IMPORT while not inside an idiom!"
-  get-current >r  get-idiom >r  importing @ >r  importing on  ['] include catch  r> importing !  throw  'idiom @ r@ add-idiom  r> set-idiom  r> set-current ;
+  strip-order  get-current >r  get-idiom >r  importing @ >r  importing on  ['] include catch  r> importing !  throw  'idiom @ r@ add-idiom  r> set-idiom  r> set-current  +orders  ;
 : include
   'idiom @ 0= if  include  exit then
-  get-current >r  get-idiom >r  include  r> set-idiom  r> set-current ;
+  strip-order  get-current >r  get-idiom >r  include  r> set-idiom r> set-current  +orders ;
 
 
 \ create an exposed wordlist out of @publics or @privates in the parent's public wordlist.
@@ -127,3 +145,5 @@ marker discard
 discard
 
 global
+
+: empty  global empty ;
