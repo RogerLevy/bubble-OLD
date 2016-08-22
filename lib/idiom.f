@@ -101,8 +101,12 @@ variable importing
                   else  drop  >in !  then
   create  (idiom)  does>  set-idiom  _public ;
 
-: import   get-current >r  get-idiom >r  importing @ >r  importing on  ['] include catch  r> importing !  throw  'idiom @ r@ add-idiom  r> set-idiom  r> set-current ;
-: include  get-current >r  get-idiom >r  include  r> set-idiom  r> set-current ;
+: import
+  'idiom @ 0= abort" Can't IMPORT while not inside an idiom!"
+  get-current >r  get-idiom >r  importing @ >r  importing on  ['] include catch  r> importing !  throw  'idiom @ r@ add-idiom  r> set-idiom  r> set-current ;
+: include
+  'idiom @ 0= if  include  exit then
+  get-current >r  get-idiom >r  include  r> set-idiom  r> set-current ;
 
 
 \ create an exposed wordlist out of @publics or @privates in the parent's public wordlist.
