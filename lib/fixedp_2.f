@@ -186,8 +186,6 @@ END-PACKAGE
 decimal
 
 package fixpointing
-: include   fixed include ;
-: included  fixed included ;
 : cells  1i cells ;
 : bytes  1i ;
 : hwords 1i 1 lshift ;
@@ -198,4 +196,9 @@ package fixpointing
 : >> rshift ; 
 end-package
 
+
+: ?fixed  0= if fixed then ;
+: include   ints @ >r  fixed include  r> ?fixed ;
+: included  ints @ >r  fixed included  r> ?fixed ;
+: import    ints @ >r  fixed import   r> ?fixed ;
 
