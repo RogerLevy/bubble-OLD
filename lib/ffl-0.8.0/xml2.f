@@ -1,16 +1,20 @@
 \ better XML handling.
 \ only read words for now (7/17/2016)
 
-[defined] decimal [if] decimal [then]
+pushpath cd engine\lib\ffl-0.8.0
 
-[undefined] dom-create [if]
-  include ffl/dom.fs
-[then]
+decimal
+
+global ffling +order
+include ffl/dom.fs
+ffling -order
 
 global idiom [xml]
 @publics export-wordlist xmling
 
 dom-create dom
+
+decimal
 
 \ the node in here is different from the one defined in nodes.f
 : >root ( dom -- node )  dom>iter nni-root ;
@@ -73,4 +77,4 @@ dom-create dom
 \ : text ( node -- adr c ) ;
 
 
-
+poppath

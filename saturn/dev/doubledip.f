@@ -10,12 +10,12 @@
 
 variable redef
 
-get-current classing set-current
+package classing
 : class
   >in @ >r  defined if  r> drop  execute dup redef ! isize !  drop
                     else  drop  r> >in ! class  then
 ;
-set-current
+end-package
 
 : staticvar  >in @ >r  defined if  drop  r> drop  exit  then  r> >in !  staticvar ;
 

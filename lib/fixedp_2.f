@@ -26,11 +26,11 @@
 \   i = integer
 
 [undefined] f+ [if]
-  requires fpmath
+requires fpmath
 [then]
 
 [undefined] +s [if]
-  include string-operations.f
+include string-operations.f
 [then]
 
 12 constant /FRAC
@@ -44,9 +44,7 @@ $1000 constant 1.0
 1.0 negate constant -1.0
 variable ints  ints on  \ set/disable integer mode on both display and interpretation
 
-
-wordlist constant fixpointing
-fixpointing +order
+package fixpointing public
 
 : fixed   fixpointing +order  ints off decimal ;
 : decimal fixpointing -order  ints on  decimal ;
@@ -72,14 +70,12 @@ fixpointing +order
 : 2pceil   pceil swap pceil swap ;
 : f>p  FPGRAN f* f>s ;
 
-get-current  fixpointing set-current
-  \ NTS: keep these as one-liners, I might make them macros...
-  : *  ( n n -- n )  1f s>f f* f>s ;
-set-current
-
+private
+\ NTS: keep these as one-liners, I might make them macros...
+: *  ( n n -- n )  1f s>f f* f>s ;
+public
 : p*  * ;
-
-get-current  fixpointing set-current
+private
 : /  ( n n -- n )  swap s>f 1f f/ f>s ;
 : /mod  ( n n -- r q ) 2dup mod -rot / ;
 : ++  1.0 swap +! ;
@@ -88,7 +84,7 @@ get-current  fixpointing set-current
 : 2*  rot * >r * r> ;
 : 2/  rot swap / >r / r> ;
 
-: i.  . ;
+: i.  . ; 
 : .   ints @ if  .  else  1f f.  then ;
 : ?   @ . ;
 : 2.  swap . . ;
@@ -96,7 +92,7 @@ get-current  fixpointing set-current
 : 2?  swap ? ? ;
 : 3?  rot ? 2? ;
 
-set-current
+public
 
 
 \ --------------------------- swiftforth-specific -----------------------------
@@ -137,18 +133,19 @@ variable sign
       then
   then  0  ;
 
-get-current fixpointing set-current
-  : .S ( ? -- ? )
-    CR DEPTH 0> IF DEPTH 0 ?DO S0 @ I 1+ CELLS - @ . LOOP THEN
-    DEPTH 0< ABORT" Underflow"
-    FDEPTH ?DUP IF
-      ."  FSTACK: "
-      0  DO  I' I - 1- FPICK N.  LOOP
-    THEN ;
-set-current
+private
+: .S ( ? -- ? )
+  CR DEPTH 0> IF DEPTH 0 ?DO S0 @ I 1+ CELLS - @ . LOOP THEN
+  DEPTH 0< ABORT" Underflow"
+  FDEPTH ?DUP IF
+    ."  FSTACK: "
+    0  DO  I' I - 1- FPICK N.  LOOP
+  THEN ;
 
+end-package
 
-STATUS-TOOLS +order
+PACKAGE STATUS-TOOLS
+public
 : SB.BASE2  ( -- )
   ints @ 0 = if
     s" FIX"
@@ -184,15 +181,11 @@ STATUS-TOOLS +order
 ' pnumber2? number-conversion >chain
 ' pnumber? number-conversion >chain
 
-STATUS-TOOLS -order
-
+END-PACKAGE
 
 decimal
-fixpointing +order
 
-get-current fixpointing set-current
-: include   fixed include ;
-: included  fixed included ;
+package fixpointing
 : cells  1i cells ;
 : bytes  1i ;
 : hwords 1i 1 lshift ;
@@ -201,6 +194,11 @@ get-current fixpointing set-current
 : rshift  1i rshift ;
 : << lshift ;
 : >> rshift ; 
-set-current
+end-package
 
-fixpointing -order
+
+: ?fixed  0= if fixed then ;
+: include   ints @ >r  fixed include  r> ?fixed ;
+: included  ints @ >r  fixed included  r> ?fixed ;
+: import    ints @ >r  fixed import   r> ?fixed ;
+

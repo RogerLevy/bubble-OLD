@@ -1,5 +1,5 @@
 
-cgriding +order
+cgridding +order
 
 \ physics rules
 
@@ -108,5 +108,5 @@ to cbit
 : does-detect  does> @ detect ;
 : detector:  create  here 0 ,   does-detect  :noname swap !  ;
 
-cgriding -order
+cgridding -order
 

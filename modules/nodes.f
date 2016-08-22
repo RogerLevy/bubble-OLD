@@ -1,6 +1,6 @@
-[core] idiom [nodes]
-
 decimal
+
+[core] idiom [nodes]
 
 \ /CLASS supports rudimentary static vars for classes.
 \  static vars are not inherited.  they have to be set for each individual class
@@ -19,10 +19,7 @@ decimal
 variable firstClass
 variable lastClass
 
-
-wordlist constant classing
-classing +order
-get-current classing set-current
+package classing
   : (class-min-size)  14 cells  /class cell- cell- max ;
   : class   ( super isize -- <name> )
     create
@@ -31,8 +28,7 @@ get-current classing set-current
     ( super ) cell+ cell+   here  (class-min-size)  move  (class-min-size)  /allot
     classing -order ;
   : extend  class ; 
-set-current
-classing -order
+end-package
 
 : super  dup isize @  classing +order ;        ( class -- super isize )
 \ : extend  !  classing -order ;

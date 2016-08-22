@@ -1,7 +1,7 @@
-[core] idiom [templist]
-
 \ create an expandable list on the system heap
+fixed
 
+package templisting
 
 0  xvar mem  xvar size  xvar next  struct /templist
 
@@ -26,3 +26,4 @@ public
 : push  ( value templist -- )
     dup ?expand  &o for>  o >items o next @ + !  cell o next +! ;
 
+end-package
