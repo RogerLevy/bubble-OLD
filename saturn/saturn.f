@@ -1,3 +1,7 @@
+include engine/core/core
+
+[core] idiom [saturn]
+
 \ engine base
 include engine/saturn/gameorama
 
