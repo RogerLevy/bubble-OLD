@@ -1,3 +1,5 @@
+\ [ ] compile instead of interpret at cli
+
 undefined [core] [if] include engine/core/core [then]
 
 

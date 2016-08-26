@@ -46,7 +46,7 @@ variable lag                                                                    
 : tick-event  etype ALLEGRO_EVENT_TIMER = -exit  tick  ;
 : game-events  common-events  tick-event ;
 
-: need-update?  eventq al_is_event_queue_empty  lag @ 4 >=  or ;                ( -- flag )
+: need-update?  eventq al_is_event_queue_empty  lag @ 4 >= or ;                ( -- flag )
 : wait  eventq e al_wait_for_event ;
 : epump  begin  dup >r  execute  r>  eventq e al_get_next_event not  until  drop ;     ( xt -- )  ( -- )
 : ?redraw  lag @ -exit  need-update? -exit  (render)  0 lag ! ;   ( -- )

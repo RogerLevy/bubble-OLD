@@ -28,7 +28,9 @@
   over c@ [char] / = if  2drop true exit  then
   2 >= if  1+ c@ [char] : =  then ;
 
-[undefined] linux? [if] char \ [else] char / [then] constant pathseparator
+[undefined] linux? [if] char \
+                   [else] char /
+                   [then] constant pathseparator
 
 create spathseparator 1 c, pathseparator c,
 

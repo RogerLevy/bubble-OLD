@@ -77,8 +77,6 @@ actor obj constant main
     r> as
 ;
 
-
-
 : :proc  actor single :noname 'act ! ;
 : :task  actor single :noname 0 me perform ;
     

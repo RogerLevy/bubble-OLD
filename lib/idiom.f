@@ -84,6 +84,8 @@ variable breadth  8 breadth !
 variable importing
 variable declared
 
+defer onSetIdiom  ' noop is onSetIdiom
+
 
 : /idiom  5 cells breadth @ cells + ;
 : @parent  'idiom @ @ ;
@@ -142,7 +144,8 @@ variable declared
   ?dup 0= if global exit then
   only forth
   'idiom !  'idiom @ wordlists+
-  @publics -order  @privates +order  @publics +order ;
+  @publics -order  @privates +order  @publics +order
+  onSetIdiom ;
 
 : extend-idiom  'idiom @ swap ! ;
 
