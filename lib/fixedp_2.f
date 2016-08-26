@@ -197,8 +197,8 @@ package fixpointing
 end-package
 
 
-: ?fixed  0= if fixed then ;
+: ?fixed  ?exit fixed ;
 : include   ints @ >r  fixed include  r> ?fixed ;
 : included  ints @ >r  fixed included  r> ?fixed ;
 : import    ints @ >r  fixed import   r> ?fixed ;
-
+: idiom     ints @ >r  idiom   r> ?fixed ;

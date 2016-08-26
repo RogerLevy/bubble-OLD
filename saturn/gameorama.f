@@ -3,8 +3,8 @@
 fixed
 64 16 + cells struct /actorslot
 
-import  engine/modules/nodes
-include engine/modules/image
+import engine/modules/nodes
+import engine/modules/image
 include engine/modules/rects
 include engine/modules/id-radixsort
 include engine/modules/templist
@@ -60,6 +60,7 @@ al_restore_default_mixer  al_get_default_mixer value mixer
   does> @ 1 0 1 3af ALLEGRO_PLAYMODE_ONCE 0 al_play_sample ;
 
 \ ----------------------------- actors / stage --------------------------------
+fixed
 list stage
 list backstage
 \ : var  create dup , cell +  does> @ me + ;                                      ( total -- <name> total+cell )
@@ -127,7 +128,7 @@ defer oneInit  ' noop is oneInit
 : unload  unload# swap 's flags or! ;
 
 \ clear everything from stage except persistent stuff.
-: cleanup  backstage stage graft  0 backstage all>  persistent# set? -exit  me stage add ;  \ put persistent actors back onstage
+: cleanup  backstage stage graft  0 backstage all>  persistent# set? -exit   me stage add ;  \ put persistent actors back onstage
 
 \ clear everything from stage including persistent stuff.  persistent stuff is not sent to BACKSTAGE.
 : clear  backstage stage graft  0 backstage all>  persistent# set? -exit  abandon ;  \ orphan persistent actors

@@ -48,8 +48,6 @@ decimal
 : h?  @ h. ;
 : validate  ( id -- id true | false )  dup 0< not dup ?exit nip ;
 : reclaim  h ! ;
-: include   fixed include fixed ;
-: included  fixed included fixed ;
 : ]#  ] postpone literal ;
 : << lshift ;
 : >> rshift ;

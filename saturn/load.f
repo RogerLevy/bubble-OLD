@@ -1,4 +1,4 @@
-create map  256 allot
+create map  #256 allot
 create dropPoint 0 , 0 ,
 
 : /dropPoint  100 100 dropPoint 2v! ;

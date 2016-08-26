@@ -11,10 +11,12 @@
     : for>  ( val addr -- )  r>  -rot  dup dup >r @ >r  !  call  r> r> ! ;
 
     : reverse   ( ... count -- ... ) 1+ 1 max 1 ?do i 1- roll loop ;
+
   [then]
 
   [undefined] idiom [if]
     include engine\lib\idiom
+    : include  sp@ >r  include  r> sp@ cell+ <> ?dup if  .s abort" STACK DEPTH CHANGED" then ;
   [then]
   
   \ a directory scanner / file finder
@@ -59,6 +61,8 @@
     true constant fixedp
     include engine\lib\fixedp_2
   [then]
+  :noname [ is onSetIdiom ]  ints @ ?fixed ;
+
   [undefined] ALLEGRO_VERSION_INT [if]
     include engine\lib\allegro-5.2\allegro-5.2.f
   [then]
