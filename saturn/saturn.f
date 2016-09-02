@@ -4,13 +4,20 @@ include engine/core/core
 
 \ engine base
 include engine/saturn/gameorama
+import engine/modules/image
+include engine/modules/rects
+include engine/modules/id-radixsort
+include engine/modules/templist
+include engine/modules/fdrill
+
 
 \ graphics services
-include engine/modules/swes/sprites
+include engine/modules/swes/swes
+import engine/modules/swes/sprites
 
 \ load other modules
-include engine/modules/stride2d
-include engine/modules/collision-grid
+import engine/modules/stride2d
+import engine/modules/collision-grid
 include engine/modules/gameutils
 include engine/modules/wallpaper
 include engine/modules/tiled-load
@@ -19,7 +26,6 @@ include engine/modules/tiled-load
 include engine/saturn/scripting.f
 
 \ constants
-: extents  0 0 4096 4096 ;
 actor single cam
 actor single player
 
@@ -33,11 +39,11 @@ include engine/saturn/autodata
 auto-load data
 
 \ more engine specific stuff
-include engine/saturn/objects.f
-include engine/saturn/physics.f
-include engine/saturn/box.f
-include engine/saturn/load.f
-include engine/saturn/zones.f
+include engine/saturn/objects
+import engine/saturn/physics
+import engine/saturn/box
+include engine/saturn/load
+include engine/saturn/zones
 
 fixed
 

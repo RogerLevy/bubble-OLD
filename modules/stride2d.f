@@ -1,3 +1,5 @@
+[core] idiom [stride2d]
+
 0 value xt
 : stride2d  ( xt pen=xy x2 y2 stridew strideh -- )  ( pen=xy w h -- )
   locals| sh sw y2 x2 |
