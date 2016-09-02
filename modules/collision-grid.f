@@ -1,4 +1,6 @@
-fixed
+[core] idiom [collision-grid]
+
+: extents  0 0 4096 4096 ;
 
 \ Fast collision manager object.  Does efficient collision checks of massive
 \ numbers of AABB (axis-aligned bounding boxes).
@@ -11,13 +13,11 @@ fixed
 \ Todo:
 \ [ ] add cmask and cflag vars to cbox struct?
 
-package cgridding public
-
 0 value cgrid  \ current cgrid
 
 : cgrid-var  create dup , cell+ does> @ cgrid + ;
 
-private
+_private
   0
     xvar x1
     xvar y1
@@ -28,16 +28,19 @@ private
     xvar s3  \  ...
     xvar s4  \  ...
   struct /cbox
-public : /cbox /cbox ;
+
+_public : /cbox /cbox ;
 
 : cbox!  ( x y w h cbox -- )  &o for>  2over 2+  #1 #1 2-  o x2 2v!  o x1 2v! ;
 : cbox@  ( cbox -- x y w h ) dup >r x1 2v@ r> x2 2v@  2over 2-  #1 #1 2+ ;
 : 4@  ( cbox -- x1 y1 x2 y2 ) dup 2v@ rot cell+ cell+ 2v@ ;
 
-private
+_private
 
   decimal
   8 12 + constant bitshift
+
+_public
   fixed
   256 constant sectw
   256 constant secth
@@ -45,6 +48,7 @@ private
   \  use a smaller size if you're going to have lots of small objects.
   \  use a larger size if you're going to have lots of large objects.
 
+_private
   \ variable topleft
   \ variable topright
   \ variable btmleft
@@ -54,7 +58,8 @@ private
   defer collide  ( ... true cbox1 cbox2 -- ... keepgoing? )
   \ defer cfilter  ( cbox1 cbox2 ... cbox1 cbox2 flag )  ' true is cfilter
 
-public
+_public
+
 0
   cgrid-var cols
   cgrid-var rows
@@ -64,7 +69,7 @@ public
 struct /cgrid
 
 
-private
+_private
 
   decimal
   : sector  ( x y -- addr )
@@ -111,7 +116,8 @@ private
     \ lastsector @ lastsector2 !
     \ dup  lastsector ! ;
 
-public
+_public
+
 : resetGrid ( cgrid -- )
   to cgrid
   sectors @ cols 2v@ * ierase
@@ -155,6 +161,4 @@ public
 
 : cgridSize  ( cgrid -- w h )
   to cgrid  cols 2v@  sectw secth 2* ;
-
-end-package
 

@@ -1,4 +1,4 @@
-fixed
+[core] idiom [safetables]
 
 \ safe tables are allocated using the system heap so that they can grow
 \ independently of the dictionary.

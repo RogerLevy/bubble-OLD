@@ -1,6 +1,4 @@
-[undefined] safetable [if] include engine/modules/safetables [then]
-
-fixed
+[swes] idiom [tileset]
 
 \ NTS: later add attributes like collision
 
